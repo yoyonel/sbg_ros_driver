@@ -1,0 +1,14 @@
+<!-- -*- mode: XML -*- -->
+<!-- start 
+     $Id$
+  -->
+
+<launch>
+
+  <!-- start -->
+  <!-- ros_args.launch -->
+  <node pkg="sbg_driver" type="ellipse" name="sbg_driver_for_ellipse_n">
+  </node>
+
+</launch>
+
