@@ -134,7 +134,7 @@ SbgErrorCode sbgEComCmdOutputGetConf(SbgEComHandle *pHandle, SbgEComOutputPort o
  *	\param[in]	mode						New output mode to set.
  *	\return									SBG_NO_ERROR if the command has been executed successfully.
  */
-SbgErrorCode sbgEComCmdOutputSetConf(SbgEComHandle *pHandle, SbgEComOutputPort outputPort, SbgEComClass classId, SbgEComMsgId msgId, SbgEComOutputMode mode);
+SbgErrorCode sbgEComCmdOutputSetConfException(SbgEComHandle *pHandle, SbgEComOutputPort outputPort, SbgEComClass classId, SbgEComMsgId msgId, SbgEComOutputMode mode);
 
 /*!
  *	Retrieve the enable of one of the output class message on one of the output interfaces.

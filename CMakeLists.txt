@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(sbg_driver)
 
+macro(add_flags SRC_FILES FLAGS)
+#  MESSAGE("Flags list to add: ${FLAGS}")
+#  MESSAGE("to this sources files:")
+  foreach(src ${SRC_FILES})
+#    MESSAGE("-> ${src}")
+    set_source_files_properties(${src} PROPERTIES COMPILE_FLAGS ${FLAGS})
+  endforeach()
+endmacro()
+
+macro(add_std_cxx11_flag SRC_FILES)
+  add_flags("${SRC_FILES}" "-std=c++11")
+endmacro()
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -127,8 +140,11 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  #
   ${PROJECT_SOURCE_DIR}/sbgECom/common
   ${PROJECT_SOURCE_DIR}/sbgECom/src
+  #
+  ${PROJECT_SOURCE_DIR}/include
 )
 
 # file(GLOB_RECURSE SRC ${PROJECT_SOURCE_DIR}/sbgECom/src/*.c)
@@ -148,7 +164,18 @@ include_directories(
 # add_dependencies(sbg ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(ellipse src/ellipse.cpp ${SRC} ${COMMON_SRC})
+add_std_cxx11_flag("src/ellipse.cpp")
+add_std_cxx11_flag("src/sbgwrapper.cpp")
+add_std_cxx11_flag("include/sbgwrapper.h")
+
+add_executable(
+    ellipse
+    src/ellipse.cpp
+    src/sbgwrapper.cpp
+    src/sbglogparser.cpp
+    ${SRC}
+    ${COMMON_SRC}
+)
 
 target_compile_options(ellipse PRIVATE -fpermissive)
 
