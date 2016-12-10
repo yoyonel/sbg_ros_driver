@@ -47,7 +47,7 @@ struct sbgEComCmdGetInfoException:sbgExceptions{
     }
 };
 
-struct sbgEComCmdOutputSetConfException:sbgExceptions{
+struct sbgEComCmdOutputSetConf:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComCmdOutputSetConf Error";
     }

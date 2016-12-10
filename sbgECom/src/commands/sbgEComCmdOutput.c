@@ -1,4 +1,4 @@
-#include "sbgEComCmdOutput.h"
+﻿#include "sbgEComCmdOutput.h"
 #include <streamBuffer/sbgStreamBuffer.h>
 
 //----------------------------------------------------------------------//
@@ -116,7 +116,7 @@ SbgErrorCode sbgEComCmdOutputGetConf(SbgEComHandle *pHandle, SbgEComOutputPort o
  *	\param[in]	conf						New output mode to set.
  *	\return									SBG_NO_ERROR if the command has been executed successfully.
  */
-SbgErrorCode sbgEComCmdOutputSetConfException(SbgEComHandle *pHandle, SbgEComOutputPort outputPort, SbgEComClass classId, SbgEComMsgId msgId, SbgEComOutputMode conf)
+SbgErrorCode sbgEComCmdOutputSetConf(SbgEComHandle *pHandle, SbgEComOutputPort outputPort, SbgEComClass classId, SbgEComMsgId msgId, SbgEComOutputMode conf)
 {
 	SbgErrorCode		errorCode = SBG_NO_ERROR;
 	uint32				trial;

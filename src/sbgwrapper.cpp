@@ -56,7 +56,7 @@ SbgErrorCode SBGWrapper::set_configuration_for_cmd_output(const SBGConfiguration
 {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
-        errCode = sbgEComCmdOutputSetConfException(&comHandle,
+        errCode = sbgEComCmdOutputSetConf(&comHandle,
                                                    _config.outputPort,
                                                    _config.classId,
                                                    _config.msgId,
