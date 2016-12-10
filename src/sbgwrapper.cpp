@@ -5,7 +5,11 @@
 void SBGWrapper::initialize()
 {
     THROW_EXCEPTION(createSerialInterface, sbgInterfaceSerialCreateException);
-    THROW_EXCEPTION(initInterface, sbgEComInitException);
+    serialinterface_is_init = true;
+
+    THROW_EXCEPTION(initECom, sbgEComInitException);
+    ecom_is_init = true;
+
     THROW_EXCEPTION(getDeviceInfo, sbgEComCmdGetInfoException);
 
     log_parser.reset(new SBGLogParser(n, private_nh));
@@ -19,19 +23,28 @@ SbgErrorCode SBGWrapper::createSerialInterface()
                                     uart_baud_rate);
 }
 
-SbgErrorCode SBGWrapper::initInterface()
+SbgErrorCode SBGWrapper::initECom()
 {
-    return sbgEComInit(&comHandle, &sbgInterface);
+    SbgErrorCode errCode = SBG_ERROR;
+    if (serialinterface_is_init)
+        errCode = sbgEComInit(&comHandle, &sbgInterface);
+    return errCode;
 }
 
 SbgErrorCode SBGWrapper::getDeviceInfo()
 {
-    return sbgEComCmdGetInfo(&comHandle, &deviceInfo);
+    SbgErrorCode errCode = SBG_ERROR;
+    if (ecom_is_init)
+        errCode = sbgEComCmdGetInfo(&comHandle, &deviceInfo);
+    return errCode;
 }
 
 SbgErrorCode SBGWrapper::save_and_reboot()
 {
-    return sbgEComCmdSettingsAction(&comHandle, SBG_ECOM_SAVE_SETTINGS);
+    SbgErrorCode errCode = SBG_ERROR;
+    if (ecom_is_init)
+        errCode = sbgEComCmdSettingsAction(&comHandle, SBG_ECOM_SAVE_SETTINGS);
+    return errCode;
 }
 
 void SBGWrapper::save_settings()
@@ -41,11 +54,14 @@ void SBGWrapper::save_settings()
 
 SbgErrorCode SBGWrapper::set_configuration_for_cmd_output(const SBGConfiguration &_config)
 {
-    return sbgEComCmdOutputSetConfException(&comHandle,
-                                            _config.outputPort,
-                                            _config.classId,
-                                            _config.msgId,
-                                            _config.conf);
+    SbgErrorCode errCode = SBG_ERROR;
+    if (ecom_is_init)
+        errCode = sbgEComCmdOutputSetConfException(&comHandle,
+                                                   _config.outputPort,
+                                                   _config.classId,
+                                                   _config.msgId,
+                                                   _config.conf);
+    return errCode;
 }
 
 void SBGWrapper::set_configuration(const SBGConfiguration &_config) {
@@ -56,7 +72,10 @@ void SBGWrapper::set_configuration(const SBGConfiguration &_config) {
 
 SbgErrorCode SBGWrapper::handle_sbgECom()
 {
-    return sbgEComHandle(&comHandle);
+    SbgErrorCode errCode = SBG_ERROR;
+    if (ecom_is_init)
+        errCode = sbgEComHandle(&comHandle);
+    return errCode;
 }
 
 void SBGWrapper::handle_logs()
@@ -68,7 +87,8 @@ void SBGWrapper::handle_logs()
     //        THROW_EXCEPTION(handle_sbgECom, sbgEComHandleException);
     handle_sbgECom();
 
-    log_parser->publish();
+    if (log_parser)
+        log_parser->publish();
 }
 
 // STATIC
@@ -81,15 +101,25 @@ void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
     // Ainsi dans le callback, on doit pouvoir reprendre la main sur notre classe
     // wrapper.
     //    sbgEComSetReceiveLogCallback(&_comHandle, onLogReceived_, _this);
-
-    sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::onLogReceived,
-                                 _this);
+    sbgEComSetReceiveLogCallback(&_comHandle, SBGLogParser::static_onLogReceived<SBGLogParser>, _this);
 }
 
-void SBGWrapper::set_callback_for_logs()
+// test de spécialisation du LogParser: 'SBGLogParser2'
+void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
+                                        SBGLogParser2* _this)
 {
-    _set_callback_for_logs(comHandle, log_parser.get());
+    sbgEComSetReceiveLogCallback(&_comHandle, SBGLogParser::static_onLogReceived<SBGLogParser2>, _this);
+}
+
+
+SbgErrorCode SBGWrapper::set_callback_for_logs()
+{
+    SbgErrorCode errCode = SBG_ERROR;
+    if (ecom_is_init) {
+        _set_callback_for_logs(comHandle, log_parser.get());
+        errCode = SBG_NO_ERROR;
+    }
+    return errCode;
 }
 
 

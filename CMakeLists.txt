@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+﻿cmake_minimum_required(VERSION 2.8.3)
 project(sbg_driver)
 
 macro(add_flags SRC_FILES FLAGS)
@@ -166,13 +166,18 @@ include_directories(
 ## Declare a C++ executable
 add_std_cxx11_flag("src/ellipse.cpp")
 add_std_cxx11_flag("src/sbgwrapper.cpp")
+add_std_cxx11_flag("src/sbglogparser.cpp")
+add_std_cxx11_flag("src/sbglogparser2.cpp")
 add_std_cxx11_flag("include/sbgwrapper.h")
+add_std_cxx11_flag("include/sbglogparser.h")
+add_std_cxx11_flag("include/sbglogparser2.h")
 
 add_executable(
     ellipse
     src/ellipse.cpp
     src/sbgwrapper.cpp
     src/sbglogparser.cpp
+    src/sbglogparser2.cpp
     ${SRC}
     ${COMMON_SRC}
 )

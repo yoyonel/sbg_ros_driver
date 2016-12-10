@@ -1,4 +1,4 @@
-#include "ros/ros.h"
+﻿#include "ros/ros.h"
 //
 #include "sbgwrapper.h"
 
@@ -24,29 +24,57 @@ int main(int argc, char **argv)
     ptr_sbgwrapper.reset(new SBGWrapper(uart_port, uart_baud_rate, n, private_nh));
     SBGWrapper& sbgwrapper = *ptr_sbgwrapper;
 
-    sbgwrapper.initialize();
+    try {
+        sbgwrapper.initialize();
+    } catch (const sbgExceptions& e) {
+        ROS_ERROR_STREAM("initialize -> Exception: " << e.what());
+    }
 
     ROS_INFO("CONNEXTION SET-UP");
 
     // ****************************** SBG Config ******************************
     //
-    sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_nav());
-    sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_quat());
-    sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_ship_motion());
+    try {
+        sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_nav());
+        sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_quat());
+        sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_ship_motion());
+    } catch (const sbgExceptions& e) {
+        ROS_ERROR_STREAM("set configuration -> Exception: " << e.what());
+    }
     //
-    sbgwrapper.save_settings();
-
+    try {
+        sbgwrapper.save_settings();
+    } catch (const sbgExceptions& e) {
+        ROS_ERROR_STREAM("save settings-> Exception: " << e.what());
+    }
     ROS_INFO("CONFIGURATION DONE");
 
     // ************************** SBG Callback for data ************************
-    sbgwrapper.set_callback_for_logs();
+    try {
+        sbgwrapper.set_callback_for_logs();
+    } catch (const sbgExceptions& e) {
+        ROS_ERROR_STREAM("set callback for logs -> Exception: " << e.what());
+    }
+    ROS_INFO("START RECEIVING DATA");
 
-    ROS_INFO("START RECEIVING DATA");   
+    SBGLogParser2 log_parser;
+    //
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT, NULL);
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV, NULL);
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION, NULL);
+    //
+//    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
+
 
     ros::Rate loop_rate(25);
     while (ros::ok())
     {
-        sbgwrapper.handle_logs();
+        try {
+            sbgwrapper.handle_logs();
+        } catch (const sbgExceptions& e) {
+            ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
+        }
+
         ros::spinOnce();
         loop_rate.sleep();
     }

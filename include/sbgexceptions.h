@@ -1,10 +1,14 @@
-#ifndef SBGEXCEPTIONS_H
+﻿#ifndef SBGEXCEPTIONS_H
 #define SBGEXCEPTIONS_H
 
 
 #define THROW_EXCEPTION(func_name, exception_name)   \
     if (func_name() != SBG_NO_ERROR) \
     throw exception_name();
+
+//#define THROW_EXCEPTION(func_name, exception_name)   \
+//    if (func_name() != SBG_NO_ERROR) \
+//    ROS_ERROR_STREAM("Exception: " << #exception_name);
 
 
 // ------------------
@@ -17,39 +21,45 @@
 // - http://geosoft.no/development/cppstyle.html
 // - https://www.quora.com/How-does-one-write-a-custom-exception-class-in-C++
 
-//struct sbgInterfaceSerialCreateException:std::exception{
-class sbgInterfaceSerialCreateException : public std::exception {
-                                                     char const *what() const noexcept{
-                                                     return "sbgInterfaceSerialCreate Error";
-                                                     }
-                                                     };
+struct sbgExceptions:std::exception{
+    char const *what() const noexcept{
+        return "sbg Error";
+    }
+};
+
+struct sbgInterfaceSerialCreateException:sbgExceptions{
+//class sbgInterfaceSerialCreateException : public std::exception {
+    char const *what() const noexcept{
+        return "sbgInterfaceSerialCreate Error";
+    }
+};
 //} sbgInterfaceSerialCreateException;
 
-struct sbgEComInitException:std::exception{
+struct sbgEComInitException:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComInit Error";
     }
 };
 
-struct sbgEComCmdGetInfoException:std::exception{
+struct sbgEComCmdGetInfoException:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComCmdGetInfo Error";
     }
 };
 
-struct sbgEComCmdOutputSetConfException:std::exception{
+struct sbgEComCmdOutputSetConfException:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComCmdOutputSetConf Error";
     }
 };
 
-struct sbgEComCmdSettingsActionException:std::exception{
+struct sbgEComCmdSettingsActionException:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComCmdSettingsAction Error";
     }
 };
 
-struct sbgEComHandleException:std::exception{
+struct sbgEComHandleException:sbgExceptions{
     char const *what() const noexcept{
         return "sbgEComHandle Error";
     }

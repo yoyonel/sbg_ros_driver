@@ -1,4 +1,4 @@
-#include "sbglogparser.h"
+﻿#include "sbglogparser.h"
 
 void SBGLogParser::init(const std::string &_topic_for_imu,
                         const std::string &_topic_for_fix,
@@ -30,25 +30,15 @@ void SBGLogParser::publish()
 SbgErrorCode SBGLogParser::onLogReceived(SbgEComHandle *pHandle,
                                          SbgEComClass msgClass,
                                          SbgEComMsgId msg,
-                                         const SbgBinaryLogData *pLogData,
-                                         void *pUserArg)
+                                         const SbgBinaryLogData *pLogData)
 {
-    //    ROS_WARN_STREAM("pUserArg: " << pUserArg);
-    SBGLogParser* ptr_sbgwrapper = static_cast<SBGLogParser*>(pUserArg);
-
-    sensor_msgs::Imu &imu_msg = ptr_sbgwrapper->imu_msg;
-    sensor_msgs::NavSatFix &nav_msg = ptr_sbgwrapper->nav_msg;
-
-    bool &new_imu_msg = ptr_sbgwrapper->new_imu_msg;
-    bool &new_nav_msg = ptr_sbgwrapper->new_nav_msg;
-
     // float time_of_week;
     switch (msg){
     case SBG_ECOM_LOG_EKF_QUAT:
+        imu_msg.orientation.w = pLogData->ekfEulerData.euler[0];
         imu_msg.orientation.x = pLogData->ekfEulerData.euler[1];
         imu_msg.orientation.y = pLogData->ekfEulerData.euler[2];
         imu_msg.orientation.z = pLogData->ekfEulerData.euler[3];
-        imu_msg.orientation.w = pLogData->ekfEulerData.euler[0];
         new_imu_msg = true;
         break;
     case SBG_ECOM_LOG_EKF_NAV:

@@ -1,4 +1,4 @@
-#ifndef SBGLOGPARSER_H
+﻿#ifndef SBGLOGPARSER_H
 #define SBGLOGPARSER_H
 
 #include "ros/ros.h"
@@ -18,19 +18,27 @@ public:
         private_nh(_private_nh)
     { }
 
-    static SbgErrorCode onLogReceived(SbgEComHandle *pHandle,
-                                      SbgEComClass msgClass,
-                                      SbgEComMsgId msg,
-                                      const SbgBinaryLogData *pLogData,
-                                      void *pUserArg);
+    template< typename T >
+    static SbgErrorCode static_onLogReceived(SbgEComHandle *pHandle,
+                                             SbgEComClass msgClass,
+                                             SbgEComMsgId msg,
+                                             const SbgBinaryLogData *pLogData,
+                                             void *pUserArg);
 
-    void init(const std::string &_topic_for_imu="imu",
-              const std::string &_topic_for_fix="fix",
-              const std::string &_frame_id="map");
+    virtual SbgErrorCode onLogReceived(SbgEComHandle *pHandle,
+                                       SbgEComClass msgClass,
+                                       SbgEComMsgId msg,
+                                       const SbgBinaryLogData *pLogData);
 
-    void publish();
+    virtual void init(const std::string &_topic_for_imu="imu",
+                      const std::string &_topic_for_fix="fix",
+                      const std::string &_frame_id="map");
+
+    virtual void publish();
 
 protected:
+    ros::NodeHandle n;
+    ros::NodeHandle private_nh;
 
 private:
     sensor_msgs::Imu imu_msg;
@@ -42,12 +50,21 @@ private:
 
     ros::Publisher imu_pub;
     ros::Publisher gps_pub;
-
-    ros::NodeHandle n;
-    ros::NodeHandle private_nh;
 };
 
 typedef boost::shared_ptr< SBGLogParser > SBGLogParserPtr;
 typedef boost::shared_ptr< SBGLogParser const> SBGLogParserConstPtr;
+
+template< typename T >
+SbgErrorCode SBGLogParser::static_onLogReceived(SbgEComHandle *pHandle,
+                                                SbgEComClass msgClass,
+                                                SbgEComMsgId msg,
+                                                const SbgBinaryLogData *pLogData,
+                                                void *pUserArg)
+{
+//    SBGLogParser* ptr_sbgwrapper = static_cast<SBGLogParser*>(pUserArg);
+    T* ptr_sbgwrapper = static_cast<T*>(pUserArg);
+    return ptr_sbgwrapper->onLogReceived(pHandle, msgClass, msg, pLogData);
+}
 
 #endif // SBGLOGPARSER_H
