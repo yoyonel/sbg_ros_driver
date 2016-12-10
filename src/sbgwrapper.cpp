@@ -101,14 +101,18 @@ void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
     // Ainsi dans le callback, on doit pouvoir reprendre la main sur notre classe
     // wrapper.
     //    sbgEComSetReceiveLogCallback(&_comHandle, onLogReceived_, _this);
-    sbgEComSetReceiveLogCallback(&_comHandle, SBGLogParser::static_onLogReceived<SBGLogParser>, _this);
+    sbgEComSetReceiveLogCallback(&_comHandle,
+                                 SBGLogParser::static_onLogReceived<SBGLogParser>,
+                                 _this);
 }
 
 // test de spécialisation du LogParser: 'SBGLogParser2'
 void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
                                         SBGLogParser2* _this)
 {
-    sbgEComSetReceiveLogCallback(&_comHandle, SBGLogParser::static_onLogReceived<SBGLogParser2>, _this);
+    sbgEComSetReceiveLogCallback(&_comHandle,
+                                 SBGLogParser::static_onLogReceived<SBGLogParser2>,
+                                 _this);
 }
 
 

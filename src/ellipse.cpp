@@ -3,6 +3,26 @@
 #include "sbgwrapper.h"
 
 
+void test_sbglogparser2()
+{
+    SBGLogParser2 log_parser;
+    //
+    const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
+    const SbgLogEkfNavData nav_data = {0, {1, 2, 3}, {5, 6, 7}, {8, 9, 10}, 11,
+                                 {12, 13, 14}, 15};
+    const SbgLogShipMotionData ship_motion_data = {0, 11, 12, {1, 2, 3},
+                                                   {5, 6, 7}, {8, 9, 10}};
+    // Cast à l'ancienne (mode C) car l'API est une API en C (à l'ancienne).
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT,
+                             (SbgBinaryLogData*)(&quat_data));
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV,
+                             (SbgBinaryLogData*)(&nav_data));
+    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION,
+                             (SbgBinaryLogData*)(&ship_motion_data));
+    //
+//    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
+}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "sbg_ellipse");
@@ -57,14 +77,7 @@ int main(int argc, char **argv)
     }
     ROS_INFO("START RECEIVING DATA");
 
-    SBGLogParser2 log_parser;
-    //
-    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT, NULL);
-    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV, NULL);
-    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION, NULL);
-    //
-//    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
-
+    test_sbglogparser2();
 
     ros::Rate loop_rate(25);
     while (ros::ok())

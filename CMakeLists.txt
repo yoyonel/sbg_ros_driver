@@ -70,6 +70,9 @@ add_message_files(
   DIRECTORY msg
   FILES
   SbgEComDeviceInfo.msg
+  SbgLogEkfEulerData.msg
+  SbgLogEkfNavData.msg
+  SbgLogShipMotionData.msg
 )
 
 
