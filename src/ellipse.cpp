@@ -2,10 +2,8 @@
 //
 #include "sbgwrapper.h"
 
-
-void test_sbglogparser2()
-{
-    SBGLogParser2 log_parser;
+void test_sbglogparser(SBGLogParser2& log_parser)
+{    
     //
     const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
     const SbgLogEkfNavData nav_data = {0, {1, 2, 3}, {5, 6, 7}, {8, 9, 10}, 11,
@@ -75,9 +73,10 @@ int main(int argc, char **argv)
     } catch (const sbgExceptions& e) {
         ROS_ERROR_STREAM("set callback for logs -> Exception: " << e.what());
     }
-    ROS_INFO("START RECEIVING DATA");
+    ROS_INFO("START RECEIVING DATA");    
 
-    test_sbglogparser2();
+    SBGLogParser2 log_parser2(n, private_nh);
+   log_parser2.init_ros_publishers();
 
     ros::Rate loop_rate(25);
     while (ros::ok())
@@ -87,6 +86,8 @@ int main(int argc, char **argv)
         } catch (const sbgExceptions& e) {
             ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
         }
+
+        test_sbglogparser(log_parser2);
 
         ros::spinOnce();
         loop_rate.sleep();
