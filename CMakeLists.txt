@@ -73,6 +73,7 @@ add_message_files(
   SbgLogEkfEulerData.msg
   SbgLogEkfNavData.msg
   SbgLogShipMotionData.msg
+  SbgLogUtcData.msg
 )
 
 
@@ -174,6 +175,7 @@ add_std_cxx11_flag("src/sbglogparser2.cpp")
 add_std_cxx11_flag("include/sbgwrapper.h")
 add_std_cxx11_flag("include/sbglogparser.h")
 add_std_cxx11_flag("include/sbglogparser2.h")
+add_std_cxx11_flag("include/sbglogparser2_visitor.h")
 
 add_executable(
     ellipse

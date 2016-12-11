@@ -57,10 +57,10 @@ SbgErrorCode SBGWrapper::set_configuration_for_cmd_output(const SBGConfiguration
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
         errCode = sbgEComCmdOutputSetConf(&comHandle,
-                                                   _config.outputPort,
-                                                   _config.classId,
-                                                   _config.msgId,
-                                                   _config.conf);
+                                          _config.outputPort,
+                                          _config.classId,
+                                          _config.msgId,
+                                          _config.conf);
     return errCode;
 }
 
@@ -106,12 +106,12 @@ void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
                                  _this);
 }
 
-// test de spécialisation du LogParser: 'SBGLogParser2'
+// test de spécialisation du LogParser: 'SBGLogParserImp'
 void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-                                        SBGLogParser2* _this)
+                                        SBGLogParserImp* _this)
 {
     sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::static_onLogReceived<SBGLogParser2>,
+                                 SBGLogParser::static_onLogReceived<SBGLogParserImp>,
                                  _this);
 }
 

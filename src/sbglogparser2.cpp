@@ -1,37 +1,10 @@
 ﻿#include "sbglogparser2.h"
+#include "sbglogparser2_visitor.h"
 #include <boost/exception/all.hpp>
-
-class visitor_sbglog_data : public boost::static_visitor<>
-{
-public:
-    visitor_sbglog_data(const SBGLogParser2* _log_parser):
-        boost::static_visitor<>(), log_parser(_log_parser)
-    {}
-
-    // utilisation de la forme templatisée de l'operator de visitor
-    // car l'opération (modulo le type instancé dans boost::variant) reste
-    // la même (récupération d'un publisher et publication du message). Le seul
-    // paramètre dynamique est le type du ROS message (type du message lié au
-    // type du log récupéré via l'API SBG).
-    template <typename T>
-    inline
-    void operator()(T& ros_msg_with_SBGData) const
-    {
-        try {
-            const ros::Publisher& pub = log_parser->get_pub<T>();
-            pub.publish(ros_msg_with_SBGData);
-        }
-        catch(std::out_of_range) {
-        }
-    }
-
-private:
-    const SBGLogParser2* log_parser;
-};
 
 // PS: probleme (warning) pour rendre 'const' onLogReceived ! :-/
 // url: http://stackoverflow.com/questions/16344444/how-to-supplement-boostexception-with-a-proper-what-function
-SbgErrorCode SBGLogParser2::onLogReceived(SbgEComHandle *pHandle,
+SbgErrorCode SBGLogParserImp::onLogReceived(SbgEComHandle *pHandle,
                                           SbgEComClass msgClass,
                                           SbgEComMsgId msg,
                                           const SbgBinaryLogData *pLogData)
@@ -49,49 +22,54 @@ SbgErrorCode SBGLogParser2::onLogReceived(SbgEComHandle *pHandle,
 
     // apply visitor on boost::variant to deal with polymorphism operations
     // (publication of ROS messages)
-    const visitor_sbglog_data& bound_visitor = visitor_sbglog_data(this);
+    auto bound_visitor = visitor_sbglog_data(this);
     boost::apply_visitor(bound_visitor, msg_ros);
+
+//    // FAILED
+//    // car 'SBGLogParserImp2' n'hérite pas de 'ISBGLogParser' et le check à la
+//    // compile dans 'visitor_sbglog_data' ne passe pas ! (=> c'est le comportement
+//    // qu'on souhait :-))
+//    class SBGLogParserImp2 {};
+//    auto log_parser2 = new SBGLogParserImp2();
+//    auto bound_visitor = visitor_sbglog_data(log_parser2);
+
+//    // OK
+//    typedef boost::variant<sbg_driver::SbgLogEkfEulerData> bv_sbglog_data2;
+//    bv_sbglog_data2 i = sbg_driver::SbgLogEkfEulerData();
+//    boost::apply_visitor(bound_visitor, i);
+
+//    // FAILED: car 'sbg_driver::SbgLogUtcData' n'est pas (encore) un type
+//    // possible pour boost::variant 'bv_sbglog_data'
+//    // => on a un check à la compilation sur les types ou boost::variant sur types
+//    // possibles !
+//    typedef boost::variant<sbg_driver::SbgLogUtcData> bv_sbglog_data2;
+//    bv_sbglog_data2 i = sbg_driver::SbgLogUtcData();
+//    boost::apply_visitor(bound_visitor, i);
 
     return errCode;
 }
 
-bv_sbglog_data SBGLogParser2::parser_for_SBG_ECOM_LOG_EKF_QUAT(const SbgBinaryLogData* pLogData) const
-{
-//    ROS_INFO_STREAM("parser_for_SBG_ECOM_LOG_EKF_QUAT");
-
-    // Bridge messages
-    // SBG (Logs) -> ROS (Messages)
-    sbg_driver::SbgLogEkfEulerData msg_efk_euler;
-    //
-    if (pLogData) {
-        // fonctionne car le message ROS suit la définition de type
-        // de SBG_Log data type (EulerData dans ce cas).
-        // url: http://en.cppreference.com/w/cpp/string/byte/memcpy
-        std::memcpy(&msg_efk_euler, &pLogData->ekfEulerData, sizeof(SbgLogEkfEulerData));
+// url: http://en.cppreference.com/w/cpp/string/byte/memcpy
+// Les messages ROS possèdent les mêmes noms (modulo le namespace 'sbh_driver::')
+// que les types SBG associés.
+// exemple: SbgLogEkfEulerData -> SbgLogEkfEulerData.msg -> sbg_driver::SbgLogEkfEulerData
+#define _DEFINE_FUNC_SBGLOG_2_ROSMSG(SUFFIX_NAME, sbg_log_type, sbg_log_var)    \
+    SBGLogParserImp::bv_sbglog_data SBGLogParserImp::parser_for_SBG_ECOM_LOG_ ## SUFFIX_NAME(const SbgBinaryLogData* pLogData) const { \
+        sbg_driver::sbg_log_type ros_msg;   \
+        if (pLogData) std::memcpy(&ros_msg, &pLogData->sbg_log_var, sizeof(sbg_log_type));   \
+        return ros_msg; \
     }
-    return msg_efk_euler;
-}
-
-bv_sbglog_data SBGLogParser2::parser_for_SBG_ECOM_LOG_EKF_NAV(const SbgBinaryLogData* pLogData) const
-{
-//    ROS_INFO_STREAM("parser_for_SBG_ECOM_LOG_EKF_NAV");
-    sbg_driver::SbgLogEkfNavData msg_efk_nav;
-    if (pLogData) std::memcpy(&msg_efk_nav, &pLogData->ekfNavData, sizeof(SbgLogEkfNavData));
-    return msg_efk_nav;
-}
-
-bv_sbglog_data SBGLogParser2::parser_for_SBG_ECOM_LOG_SHIP_MOTION(const SbgBinaryLogData* pLogData) const
-{
-//    ROS_INFO_STREAM("parser_SBG_ECOM_LOG_SHIP_MOTION");
-    sbg_driver::SbgLogShipMotionData msg_ship_motion;
-    if (pLogData) std::memcpy(&msg_ship_motion, &pLogData->shipMotionData, sizeof(SbgLogShipMotionData));
-    return msg_ship_motion;
-}
+//
+_DEFINE_FUNC_SBGLOG_2_ROSMSG(EKF_QUAT,      SbgLogEkfEulerData,     ekfEulerData)
+_DEFINE_FUNC_SBGLOG_2_ROSMSG(EKF_NAV,       SbgLogEkfNavData,       ekfNavData)
+_DEFINE_FUNC_SBGLOG_2_ROSMSG(SHIP_MOTION,   SbgLogShipMotionData,   shipMotionData)
+_DEFINE_FUNC_SBGLOG_2_ROSMSG(UTC_DATA,      SbgLogUtcData,          utcData)
 
 // TODO: séparer les publishers ROS de la construction des messages ROS (from SBG API).
-void SBGLogParser2::init_ros_publishers()
+void SBGLogParserImp::init_ros_publishers()
 {
     map_sbglog_pub[typeid(sbg_driver::SbgLogEkfEulerData)] = n.advertise<sbg_driver::SbgLogEkfEulerData>("SbgLogEkfEulerData", 10);
     map_sbglog_pub[typeid(sbg_driver::SbgLogEkfNavData)] = n.advertise<sbg_driver::SbgLogEkfNavData>("SbgLogEkfNavData", 10);
     map_sbglog_pub[typeid(sbg_driver::SbgLogShipMotionData)] = n.advertise<sbg_driver::SbgLogShipMotionData>("SbgLogShipMotionData", 10);
+    map_sbglog_pub[typeid(sbg_driver::SbgLogUtcData)] = n.advertise<sbg_driver::SbgLogUtcData>("SbgLogShipUtcData", 10);
 }

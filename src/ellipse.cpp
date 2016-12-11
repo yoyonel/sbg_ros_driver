@@ -2,7 +2,7 @@
 //
 #include "sbgwrapper.h"
 
-void test_sbglogparser(SBGLogParser2& log_parser)
+void test_sbglogparser(SBGLogParserImp& log_parser)
 {    
     //
     const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
@@ -17,7 +17,8 @@ void test_sbglogparser(SBGLogParser2& log_parser)
                              (SbgBinaryLogData*)(&nav_data));
     log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION,
                              (SbgBinaryLogData*)(&ship_motion_data));
-    //
+
+    // Exception Boost: bad call function
 //    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
 }
 
@@ -75,8 +76,8 @@ int main(int argc, char **argv)
     }
     ROS_INFO("START RECEIVING DATA");    
 
-    SBGLogParser2 log_parser2(n, private_nh);
-   log_parser2.init_ros_publishers();
+    SBGLogParserImp log_parser2(n, private_nh);
+//   log_parser2.init_ros_publishers();
 
     ros::Rate loop_rate(25);
     while (ros::ok())

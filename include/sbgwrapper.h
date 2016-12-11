@@ -70,7 +70,7 @@ protected:
     SbgErrorCode handle_sbgECom();
 
     void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParser *_this);
-    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParser2 *_this);
+    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParserImp *_this);
 
 
 private:
