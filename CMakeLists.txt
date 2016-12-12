@@ -74,6 +74,8 @@ add_message_files(
   SbgLogEkfNavData.msg
   SbgLogShipMotionData.msg
   SbgLogUtcData.msg
+  SbgLogStatusData.msg
+  SbgLogImuData.msg
 )
 
 
@@ -172,17 +174,27 @@ add_std_cxx11_flag("src/ellipse.cpp")
 add_std_cxx11_flag("src/sbgwrapper.cpp")
 add_std_cxx11_flag("src/sbglogparser.cpp")
 add_std_cxx11_flag("src/sbglogparser2.cpp")
+add_std_cxx11_flag("src/SBGLogtoROSMsg.cpp")
+add_std_cxx11_flag("src/SBGLogtoROSPublisher.cpp")
+add_std_cxx11_flag("src/SBGLogtoROSPublisher_Visitor.cpp")
 add_std_cxx11_flag("include/sbgwrapper.h")
 add_std_cxx11_flag("include/sbglogparser.h")
+add_std_cxx11_flag("include/sbglogparser.inl")
 add_std_cxx11_flag("include/sbglogparser2.h")
-add_std_cxx11_flag("include/sbglogparser2_visitor.h")
+add_std_cxx11_flag("include/SBGLogtoROSMsg.h")
+add_std_cxx11_flag("include/SBGLogtoROSPublisher.h")
+add_std_cxx11_flag("include/SBGLogtoROSPublisher.inl")
+add_std_cxx11_flag("include/SBGLogtoROSPublisher_Visitor.h")
 
 add_executable(
     ellipse
     src/ellipse.cpp
     src/sbgwrapper.cpp
     src/sbglogparser.cpp
-    src/sbglogparser2.cpp
+    src/sbglogparser2.cpp    
+    src/SBGLogtoROSMsg.cpp    
+    src/SBGLogtoROSPublisher.cpp
+    src/SBGLogtoROSPublisher_Visitor.cpp
     ${SRC}
     ${COMMON_SRC}
 )

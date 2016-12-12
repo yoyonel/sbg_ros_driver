@@ -55,16 +55,6 @@ private:
 typedef boost::shared_ptr< SBGLogParser > SBGLogParserPtr;
 typedef boost::shared_ptr< SBGLogParser const> SBGLogParserConstPtr;
 
-template< typename T >
-SbgErrorCode SBGLogParser::static_onLogReceived(SbgEComHandle *pHandle,
-                                                SbgEComClass msgClass,
-                                                SbgEComMsgId msg,
-                                                const SbgBinaryLogData *pLogData,
-                                                void *pUserArg)
-{
-//    SBGLogParser* ptr_sbgwrapper = static_cast<SBGLogParser*>(pUserArg);
-    T* ptr_sbgwrapper = static_cast<T*>(pUserArg);
-    return ptr_sbgwrapper->onLogReceived(pHandle, msgClass, msg, pLogData);
-}
+#include "sbglogparser.inl"
 
 #endif // SBGLOGPARSER_H

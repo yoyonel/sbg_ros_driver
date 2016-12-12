@@ -8,8 +8,6 @@
 #include <iostream>
 #include <exception>
 //
-//#include "enum.h"
-//
 #include <boost/shared_ptr.hpp>
 //
 #include "ros/ros.h"
@@ -20,17 +18,6 @@
 #include "sbgexceptions.h"
 #include "sbgconfiguration.h"
 
-//// ------------------
-//// BETTER ENUMERATIONS
-//// ------------------
-//BETTER_ENUM( _SbgWrapperEComOutputPort, char,
-//             SBGWRAPPER_ECOM_OUTPUT_PORT_A = 0,				/*!< Main output port. */
-//             SBGWRAPPER_ECOM_OUTPUT_PORT_C = 2,				/*!< Secondary output port only available on Ellipse-E devices */
-//             SBGWRAPPER_ECOM_OUTPUT_PORT_E = 4				/*!< Secondary output port only available on B1 devices */
-//        )
-
-
-//template< class TLogParser >
 class SBGWrapper
 {
 public:
@@ -70,7 +57,7 @@ protected:
     SbgErrorCode handle_sbgECom();
 
     void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParser *_this);
-    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParserImp *_this);
+//    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogtoROSMsg *_this);
 
 
 private:

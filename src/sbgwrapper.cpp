@@ -91,7 +91,6 @@ void SBGWrapper::handle_logs()
         log_parser->publish();
 }
 
-// STATIC
 void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
                                         SBGLogParser* _this)
 {
@@ -107,13 +106,13 @@ void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
 }
 
 // test de spécialisation du LogParser: 'SBGLogParserImp'
-void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-                                        SBGLogParserImp* _this)
-{
-    sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::static_onLogReceived<SBGLogParserImp>,
-                                 _this);
-}
+//void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
+//                                        SBGLogtoROSMsg* _this)
+//{
+//    sbgEComSetReceiveLogCallback(&_comHandle,
+//                                 SBGLogParser::static_onLogReceived<SBGLogtoROSMsg>,
+//                                 _this);
+//}
 
 
 SbgErrorCode SBGWrapper::set_callback_for_logs()

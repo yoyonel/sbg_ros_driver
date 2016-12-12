@@ -2,7 +2,7 @@
 //
 #include "sbgwrapper.h"
 
-void test_sbglogparser(SBGLogParserImp& log_parser)
+void test_sbglogparser(SBGLogtoROSMsg& log_parser)
 {    
     //
     const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
@@ -76,8 +76,7 @@ int main(int argc, char **argv)
     }
     ROS_INFO("START RECEIVING DATA");    
 
-    SBGLogParserImp log_parser2(n, private_nh);
-//   log_parser2.init_ros_publishers();
+    SBGLogtoROSMsg sbglogparser_to_ros(n, private_nh);
 
     ros::Rate loop_rate(25);
     while (ros::ok())
@@ -88,7 +87,7 @@ int main(int argc, char **argv)
             ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
         }
 
-        test_sbglogparser(log_parser2);
+        test_sbglogparser(sbglogparser_to_ros);
 
         ros::spinOnce();
         loop_rate.sleep();
