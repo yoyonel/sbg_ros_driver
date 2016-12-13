@@ -1,0 +1,157 @@
+On a un source => HEADER qu'on peut considérer principal (à partir de lui on peut récupérer toutes les informations).
+=> /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogs.h
+
+Par parsing (texte à la main), on récupère les includes qui nous intéressent:
+#include "sbgEComBinaryLogDebug.h"
+#include "sbgEComBinaryLogDvl.h"
+#include "sbgEComBinaryLogEkf.h"
+#include "sbgEComBinaryLogEvent.h"
+#include "sbgEComBinaryLogGps.h"
+#include "sbgEComBinaryLogImu.h"
+#include "sbgEComBinaryLogMag.h"
+#include "sbgEComBinaryLogOdometer.h"
+#include "sbgEComBinaryLogPressure.h"
+#include "sbgEComBinaryLogShipMotion.h"
+#include "sbgEComBinaryLogStatus.h"
+#include "sbgEComBinaryLogUsbl.h"
+#include "sbgEComBinaryLogUtc.h"
+
+=> pattern de recherche: '#include "sbgEComBinaryLog*.h"'
+étoile fournira: Debug, Dvl, Ekf, ...
+
+Dans ces includes (.h), on recherche (via AST) les typedef structs avec un pattern nom: 'SbgLog'
+
+Par exemple:
+pour le header: #include "sbgEComBinaryLogEkf.h"
+On a l'AST (filtré) suivant:
+TRANSLATION_UNIT /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.h
++--TYPEDEF_DECL SbgLogEkfEulerData
+  |  +--STRUCT_DECL _SbgLogEkfEulerData
+  |     +--FIELD_DECL timeStamp
+  |     |  +--TYPE_REF uint32
+  |     +--FIELD_DECL euler
+  |     |  +--INTEGER_LITERAL 
+  |     +--FIELD_DECL eulerStdDev
+  |     |  +--INTEGER_LITERAL 
+  |     +--FIELD_DECL status
+  |        +--TYPE_REF uint32
++--TYPEDEF_DECL SbgLogEkfQuatData
+  |  +--STRUCT_DECL _SbgLogEkfQuatData
+  |     +--FIELD_DECL timeStamp
+  |     |  +--TYPE_REF uint32
+  |     +--FIELD_DECL quaternion
+  |     |  +--INTEGER_LITERAL 
+  |     +--FIELD_DECL eulerStdDev
+  |     |  +--INTEGER_LITERAL 
+  |     +--FIELD_DECL status
+  |        +--TYPE_REF uint32
+etc ...
+
+Avec cette analyse, on devrait pouvoir générer tous les .msg ROS Messages
+Pour générer les messages ROS il faut plus d'informations sur les types, les tableaux, etc ...
+Le code C correspondant à la définition d'un type pour log:
+    /*!
+     * EKF computed orientation using euler angles.
+     */
+    typedef struct _SbgLogEkfEulerData
+    {
+	    uint32	timeStamp;				/*!< Time in us since the sensor power up. */
+	    float	euler[3];				/*!< Roll, Pitch and Yaw angles in rad. */
+	    float	eulerStdDev[3];			/*!< Roll, Pitch and Yaw angles 1 sigma standard deviation in rad. */
+	    uint32	status;					/*!< EKF solution status bitmask and enum. */
+    } SbgLogEkfEulerData;
+
+Ce que notre parser AST (avec plus d'informations) génère:
+      +--TYPEDEF_DECL SbgLogEkfEulerData - TypeKind.TYPEDEF = 32 bytes [line=118, col=3]
+      |  +--STRUCT_DECL _SbgLogEkfEulerData - TypeKind.RECORD = 32 bytes [line=112, col=16]
+      |     +--FIELD_DECL timeStamp - TypeKind.TYPEDEF = 4 bytes [line=114, col=9]
+      |     |  +--TYPE_REF uint32 - TypeKind.TYPEDEF = 4 bytes [line=114, col=2]
+      |     +--FIELD_DECL euler - TypeKind.CONSTANTARRAY = 12 bytes [line=115, col=8]
+      |     |  +--INTEGER_LITERAL  - TypeKind.INT = 4 bytes [line=115, col=14]
+      |     +--FIELD_DECL eulerStdDev - TypeKind.CONSTANTARRAY = 12 bytes [line=116, col=8]
+      |     |  +--INTEGER_LITERAL  - TypeKind.INT = 4 bytes [line=116, col=20]
+      |     +--FIELD_DECL status - TypeKind.TYPEDEF = 4 bytes [line=117, col=9]
+      |        +--TYPE_REF uint32 - TypeKind.TYPEDEF = 4 bytes [line=117, col=2]
+      
+=> On rajoute les informations de tailles et les types de éléments.
+
+Ainsi 'float	euler[3];' devient       
+    |     +--FIELD_DECL euler - TypeKind.CONSTANTARRAY = 12 bytes [line=115, col=8]
+    |     |  +--INTEGER_LITERAL  - TypeKind.INT = 4 bytes [line=115, col=14] 
+    
+On récupère les informations 'euler' - 'TypeKind.CONSTANTARRAY' avec une taille totale du tableau de '12 bytes',
+et les éléments composants ce tableau 'TypeKind.INT' avec une taille par élément '4 bytes'
+On peut retrouver la taille du tableau => '12 bytes' / '4 bytes' => 12/4 = 3
+
+Toujours dans '.../sbgECom/src/binaryLogs/sbgEComBinaryLogs.h', 
+on peut récupérer et analyser le typedef union suivant: 'typedef union _SbgBinaryLogData':
+  1 TRANSLATION_UNIT /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogs.h [line=0    , col=0]
+  2   +--UNION_DECL _SbgBinaryLogData [line=46, col=15]
+  3   |  +--FIELD_DECL statusData [line=48, col=20]
+  4   |  |  +--TYPE_REF SbgLogStatusData [line=48, col=2]
+  5   |  +--FIELD_DECL imuData [line=49, col=18]
+  6   |  |  +--TYPE_REF SbgLogImuData [line=49, col=2]
+  7   |  +--FIELD_DECL ekfEulerData [line=50, col=22]
+  8   |  |  +--TYPE_REF SbgLogEkfEulerData [line=50, col=2]
+  9   |  +--FIELD_DECL ekfQuatData [line=51, col=21]
+ 10   |  |  +--TYPE_REF SbgLogEkfQuatData [line=51, col=2]
+
+A partir des lignes, on peut analyser les commentaires:
+line=48 => 	SbgLogStatusData		statusData;			/*!< Stores data for the SBG_ECOM_LOG_STATUS message. */
+On peut récupérer le commentaire entre '/*!< ' et ' */', on récupère alors: 'Stores data for the SBG_ECOM_LOG_STATUS message.'
+(ps: on peut aussi récupérer les raw_comment via AST:
+TRANSLATION_UNIT /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogs.h - TypeKind.INVALID = -1 bytes - None [line=0, col=0]
+  ...
+  |  +--FIELD_DECL statusData - TypeKind.TYPEDEF = 24 bytes - /*!< Stores data for the SBG_ECOM_LOG_STATUS message. */ [line=48, col=20]
+  |  |  +--TYPE_REF SbgLogStatusData - TypeKind.TYPEDEF = 24 bytes - None [line=48, col=2]
+  |  +--FIELD_DECL imuData - TypeKind.TYPEDEF = 60 bytes - /*!< Stores data for the SBG_ECOM_LOG_IMU_DATA message. */ [line=49, col=18]
+  |  |  +--TYPE_REF SbgLogImuData - TypeKind.TYPEDEF = 60 bytes - None [line=49, col=2]
+  ...
+
+et ce qui nous intéresse est le token suivant ce pattern: 'SBG_ECOM_LOG_' => 'SBG_ECOM_LOG_STATUS'
+Via l'AST on a: 
++--TYPE_REF SbgLogStatusData [line=48, col=2]
+=> 'SbgLogStatusData'
+rattaché à 'SBG_ECOM_LOG_STATUS'
+
+On a aussi (précédemment) lié 'SbgLogStatusData' à un message ROS (.msg),
+du coup on a la chaine 'SbgLogStatusData' -> 'SBG_ECOM_LOG_STATUS' -> ROS Message
+
+Problème: il y a de la métanotation dans les commentaires pour certains logs/types/variables.
+Par exemple:
+'SbgLogEvent				eventMarker;		/*!< Stores data for the SBG_ECOM_LOG_EVENT_# message. */'
+=> 'SBG_ECOM_LOG_EVENT_#'
+
+On peut via une analyse du header '/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/sbgEComIds.h':
+1 TRANSLATION_UNIT /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/sbgEComIds.h [line=0, col=0]
+...
+123   |     +--ENUM_CONSTANT_DECL SBG_ECOM_LOG_EVENT_A [line=95, col=2]
+124   |     |  +--INTEGER_LITERAL  [line=95, col=28]
+125   |     +--ENUM_CONSTANT_DECL SBG_ECOM_LOG_EVENT_B [line=96, col=2]
+126   |     |  +--INTEGER_LITERAL  [line=96, col=28]
+127   |     +--ENUM_CONSTANT_DECL SBG_ECOM_LOG_EVENT_C [line=97, col=2]
+128   |     |  +--INTEGER_LITERAL  [line=97, col=27]
+129   |     +--ENUM_CONSTANT_DECL SBG_ECOM_LOG_EVENT_D [line=98, col=2]
+130   |     |  +--INTEGER_LITERAL  [line=98, col=28]
+131   |     +--ENUM_CONSTANT_DECL SBG_ECOM_LOG_EVENT_E [line=99, col=2]
+132   |     |  +--INTEGER_LITERAL  [line=99, col=27]
+
+On peut déduire que '#' correspond à la liste = ['A', 'B', ..., 'E']
+
+Il y a d'autres cas avec '#' correspond à des chiffres ('0', '1', '2', ...) comme les 'SBG_ECOM_LOG_GPS_*' issus de:
+/*!< Stores data for the SBG_ECOM_LOG_GPS#_VEL message. */
+/*!< Stores data for the SBG_ECOM_LOG_GPS#_HDT message. */
+/*!< Stores data for the SBG_ECOM_LOG_GPS#_RAW message. */
+ps: d'ailleurs il y a une erreur dans les commentaires 'SBG_ECOM_LOG_GPS_POS' devrait être 'SBG_ECOM_LOG_GPS#_POS' car:
+	SBG_ECOM_LOG_GPS1_VEL 			= 13,			/*!< GPS velocities from primary or secondary GPS receiver */
+	SBG_ECOM_LOG_GPS1_POS 			= 14,			/*!< GPS positions from primary or secondary GPS receiver */
+	SBG_ECOM_LOG_GPS1_HDT 			= 15,			/*!< GPS true heading from dual antenna system */
+	SBG_ECOM_LOG_GPS1_RAW			= 31,			/*!< GPS 1 raw data for post processing. */
+
+	SBG_ECOM_LOG_GPS2_VEL			= 16,			/*!< GPS 2 velocity log data. */
+	SBG_ECOM_LOG_GPS2_POS			= 17,			/*!< GPS 2 position log data. */
+	SBG_ECOM_LOG_GPS2_HDT			= 18,			/*!< GPS 2 true heading log data. */
+	SBG_ECOM_LOG_GPS2_RAW			= 38,			/*!< GPS 2 raw data for post processing. */
+dans 'sbgECom/src/sbgEComIds.h'
+
+Modulo les erreurs potentielles dans les commentaires, ça ne devrait pas être trop dur d'interpréter les '#' pour les énumérations de types.
