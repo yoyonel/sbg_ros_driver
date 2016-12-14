@@ -4,6 +4,7 @@ import clang.cindex
 import asciitree  # must be version 0.2
 import sys
 import re
+import os
 
 
 def node_children(node):
@@ -80,7 +81,7 @@ def extract_tuples_sbglog_types(tu):
         """
         node_type = node_level_field.type
         # print('\t\t{} [{} bytes] {} - {}'.format(node_type.spelling, node_type.get_size(),
-        #                                          node.spelling, node.raw_comment))
+        # node.spelling, node.raw_comment))
         return str(node_type.spelling), str(node_level_field.raw_comment)
 
     def extract_from_union(node_level_typedef):
@@ -129,7 +130,8 @@ def extract_enum_from_comment(comment, prefix_for_enum='SBG_ECOM_LOG_'):
     comment_splitted = comment.split(prefix_for_enum)[1:]
     if comment_splitted:
         comment_splitted = map(lambda s: s.split(" "), comment_splitted)
-        result = [prefix_for_enum + words_in_comment[0] for words_in_comment in comment_splitted]
+        result = [prefix_for_enum + words_in_comment[0]
+                  for words_in_comment in comment_splitted]
     return result
 
 
@@ -155,7 +157,7 @@ if __name__ == "__main__":
 
     filename = sys.argv[1]
 
-    ####################################################################################################################
+    ##########################################################################
     with open(filename, 'r') as fo:
         sourcefile = fo.readlines()
 
@@ -167,34 +169,33 @@ if __name__ == "__main__":
 
     path_to_headers = "/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/"
 
-    ####################################################################################################################
+    ##########################################################################
 
-    ####################################################################################################################
+    ##########################################################################
     # clang.cindex.Config.set_library_file('/usr/local/lib/libclang.so')
     clang.cindex.Config.set_library_file('/usr/lib/llvm-3.8/lib/libclang.so.1')
     index = clang.cindex.Index.create()
     # translation_unit = index.parse(sys.argv[1], ['-x', 'c++', '-std=c++11', '-D__CODE_GENERATOR__'])
     # translation_unit = index.parse(sys.argv[1], ['-x', 'c', '-D__CODE_GENERATOR__'])
+
+    list_options_for_clang = [
+        '-Xclang', '-std=c', '-ast-dump', '-fsyntax-only',
+        '-D__CODE_GENERATOR__',
+        '-I{}'.format(os.path.abspath('../sbgECom/src')),
+        '-I{}'.format(os.path.abspath('../sbgECom/src/binaryLogs')),
+        '-I{}'.format(os.path.abspath('../sbgECom/common')),
+    ]
+
     translation_unit = index.parse(
         filename,
-        ['-Xclang', '-std=c', '-ast-dump', '-fsyntax-only', '-D__CODE_GENERATOR__',
-         '-I../sbgECom/src',
-         '-I../sbgECom/src/binaryLogs',
-         '-I../sbgECom/common',
-         ]
+        list_options_for_clang
     )
 
     # translation_unit.save(filename+'.ast')
 
-    print(asciitree.draw_tree(translation_unit.cursor, node_children, print_node))
+    print(asciitree.draw_tree(
+        translation_unit.cursor, node_children, print_node))
     # print(translation_unit.spelling)
-
-    ###########################################
-    # Récupération de la liste des headers
-    ###########################################
-    print("\n".join(list(extract_headers_from_ast(translation_unit))))
-
-    print("")
 
     ###########################################
     # Association des types des sbglog avec les enums
@@ -206,4 +207,20 @@ if __name__ == "__main__":
         print("{} -> {}".format(sbgtypes,
                                 ", ".join(map(str, enums))))
 
-    ####################################################################################################################
+    ###########################################
+    # Récupération de la liste des headers
+    ###########################################
+    headers = list(extract_headers_from_ast(translation_unit))
+    print("\n".join(headers))
+    print("")
+
+    print("headers[0]: {}".format(headers[0]))
+    index = clang.cindex.Index.create()
+    translation_unit_header = index.parse(
+        headers[0],
+        list_options_for_clang
+    )
+    print(asciitree.draw_tree(
+        translation_unit_header.cursor, node_children, print_node))
+
+    ##########################################################################
