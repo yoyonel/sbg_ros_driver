@@ -178,9 +178,9 @@ if __name__ == "__main__":
     translation_unit = index.parse(
         filename,
         ['-Xclang', '-std=c', '-ast-dump', '-fsyntax-only', '-D__CODE_GENERATOR__',
-         '-I/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src',
-         '-I/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs',
-         '-I/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/common',
+         '-I../sbgECom/src',
+         '-I../sbgECom/src/binaryLogs',
+         '-I../sbgECom/common',
          ]
     )
 
