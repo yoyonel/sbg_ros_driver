@@ -1,3 +1,7 @@
+# .swp files from vim
+*.swp
+*.swo
+
 # from: https://raw.githubusercontent.com/yoyonel/gitignore/master/ROS.gitignore
 build/
 bin/
