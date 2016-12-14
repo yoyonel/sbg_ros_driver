@@ -1,0 +1,7 @@
+asciitree==0.2
+clang
+
+# for powerline
+git+git://github.com/powerline/powerline
+requests 
+docker-py
