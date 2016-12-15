@@ -16,6 +16,7 @@
 #include "sbg_driver/SbgLogEkfNavData.h"
 #include "sbg_driver/SbgLogUtcData.h"
 #include "sbg_driver/SbgLogMag.h"
+#include "sbg_driver/SbgLogGpsPos.h"
 #include "sbg_driver/SbgLogDebug0Data.h"
 
 //
@@ -58,6 +59,7 @@ public:
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogEkfNavData);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogUtcData);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogMag);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogGpsPos);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogDebug0Data);
 
 private:

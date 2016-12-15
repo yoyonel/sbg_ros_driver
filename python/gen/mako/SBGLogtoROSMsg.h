@@ -25,6 +25,7 @@
 #include "sbg_driver/SbgLogEkfNavData.h"
 #include "sbg_driver/SbgLogUtcData.h"
 #include "sbg_driver/SbgLogMag.h"
+#include "sbg_driver/SbgLogGpsPos.h"
 #include "sbg_driver/SbgLogDebug0Data.h"
 
 //
@@ -84,6 +85,7 @@ private:
 	    ,sbg_driver::SbgLogEkfNavData
 	    ,sbg_driver::SbgLogUtcData
 	    ,sbg_driver::SbgLogMag
+	    ,sbg_driver::SbgLogGpsPos
 	    ,sbg_driver::SbgLogDebug0Data
 	> bv_sbglog_data;
 
@@ -103,6 +105,7 @@ private:
 	bv_sbglog_data parser_for_SbgLogEkfNavData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogUtcData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogMag	(const SbgBinaryLogData *pLogData) const;
+	bv_sbglog_data parser_for_SbgLogGpsPos	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogDebug0Data	(const SbgBinaryLogData *pLogData) const;
     
 	typedef boost::function<bv_sbglog_data(const SBGLogtoROSMsg*, const SbgBinaryLogData*)> fun_t;
@@ -117,6 +120,7 @@ private:
 	    ,{ SBG_ECOM_LOG_SHIP_MOTION_HP,    &SBGLogtoROSMsg::parser_for_SbgLogShipMotionData	}
 	    ,{ SBG_ECOM_LOG_ODO_VEL,    &SBGLogtoROSMsg::parser_for_SbgLogOdometerData	}
 	    ,{ SBG_ECOM_LOG_UTC_TIME,    &SBGLogtoROSMsg::parser_for_SbgLogUtcData	}
+	    ,{ SBG_ECOM_LOG_GPS_POS,    &SBGLogtoROSMsg::parser_for_SbgLogGpsPos	}
 	    ,{ SBG_ECOM_LOG_MAG,    &SBGLogtoROSMsg::parser_for_SbgLogMag	}
 	    ,{ SBG_ECOM_LOG_MAG_CALIB,    &SBGLogtoROSMsg::parser_for_SbgLogMagCalib	}
 	    ,{ SBG_ECOM_LOG_DVL_BOTTOM_TRACK,    &SBGLogtoROSMsg::parser_for_SbgLogDvlData	}

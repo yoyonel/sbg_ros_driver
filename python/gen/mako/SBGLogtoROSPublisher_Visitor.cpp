@@ -18,6 +18,7 @@ _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogShipMotionData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogEkfNavData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogUtcData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogMag)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogGpsPos)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogDebug0Data)
 
 template <typename T>

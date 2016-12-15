@@ -1,5 +1,6 @@
 asciitree==0.2
 clang
+mako
 
 # for powerline
 git+git://github.com/powerline/powerline
