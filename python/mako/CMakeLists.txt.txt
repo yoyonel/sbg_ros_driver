@@ -1,0 +1,8 @@
+# Generate messages in the 'msg' folder
+add_message_files(
+  DIRECTORY msg
+  FILES
+% for sbglog in sbglogs:
+  ${sbglog.type}.msg
+% endfor
+)

@@ -1,12 +1,6 @@
-# typedef struct _SbgLogEkfEulerData
-# {
-#         uint32  timeStamp;              /*!< Time in us since the sensor power up. */
-#         float   euler[3];               /*!< Roll, Pitch and Yaw angles in rad. */
-#         float   eulerStdDev[3];         /*!< Roll, Pitch and Yaw angles 1 sigma standard deviation in rad. */
-#         uint32  status;                 /*!< EKF solution status bitmask and enum. */
-# } SbgLogEkfEulerData;
-
-uint32  timeStamp
-float32[3]   euler
-float32[3]   eulerStdDev
-uint32  status
+# Generated from: /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.h
+# SbgLogEkfEulerData
+uint32 timeStamp
+float32[3] euler
+float32[3] eulerStdDev
+uint32 status

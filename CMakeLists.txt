@@ -65,17 +65,30 @@ find_package(catkin REQUIRED COMPONENTS
 #   Message1.msg
 #   Message2.msg
 # )
-## Generate messages in the 'msg' folder
+# Generate messages in the 'msg' folder
 add_message_files(
   DIRECTORY msg
   FILES
-  SbgEComDeviceInfo.msg
-  SbgLogEkfEulerData.msg
-  SbgLogEkfNavData.msg
-  SbgLogShipMotionData.msg
-  SbgLogUtcData.msg
   SbgLogStatusData.msg
   SbgLogImuData.msg
+  SbgLogEkfEulerData.msg
+  SbgLogEkfQuatData.msg
+  SbgLogEkfNavData.msg
+  SbgLogShipMotionData.msg
+  SbgLogOdometerData.msg
+  SbgLogUtcData.msg
+  SbgLogGpsPos.msg
+  SbgLogGpsVel.msg
+  SbgLogGpsHdt.msg
+  SbgLogGpsRaw.msg
+  SbgLogMag.msg
+  SbgLogMagCalib.msg
+  SbgLogDvlData.msg
+  SbgLogPressureData.msg
+  SbgLogUsblData.msg
+  SbgLogEvent.msg
+  SbgLogDebug0Data.msg
+  SbgLogFastImuData.msg
 )
 
 
@@ -191,8 +204,8 @@ add_executable(
     src/ellipse.cpp
     src/sbgwrapper.cpp
     src/sbglogparser.cpp
-    src/sbglogparser2.cpp    
-    src/SBGLogtoROSMsg.cpp    
+    src/sbglogparser2.cpp
+    src/SBGLogtoROSMsg.cpp
     src/SBGLogtoROSPublisher.cpp
     src/SBGLogtoROSPublisher_Visitor.cpp
     ${SRC}

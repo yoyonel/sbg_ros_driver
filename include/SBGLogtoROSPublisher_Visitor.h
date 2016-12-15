@@ -1,18 +1,28 @@
 #ifndef SBGLOGPARSER2_VISITOR_H
 #define SBGLOGPARSER2_VISITOR_H
 
-#include "sbg_driver/SbgLogEkfNavData.h"
+// include des headers des messages ROS
+#include "sbg_driver/SbgLogImuData.h"
+#include "sbg_driver/SbgLogMagCalib.h"
+#include "sbg_driver/SbgLogEkfQuatData.h"
+#include "sbg_driver/SbgLogDvlData.h"
+#include "sbg_driver/SbgLogUsblData.h"
+#include "sbg_driver/SbgLogPressureData.h"
+#include "sbg_driver/SbgLogFastImuData.h"
+#include "sbg_driver/SbgLogOdometerData.h"
+#include "sbg_driver/SbgLogStatusData.h"
 #include "sbg_driver/SbgLogEkfEulerData.h"
 #include "sbg_driver/SbgLogShipMotionData.h"
+#include "sbg_driver/SbgLogEkfNavData.h"
 #include "sbg_driver/SbgLogUtcData.h"
-#include "sbg_driver/SbgLogStatusData.h"
-#include "sbg_driver/SbgLogImuData.h"
+#include "sbg_driver/SbgLogMag.h"
+#include "sbg_driver/SbgLogDebug0Data.h"
+
 //
 #include <boost/variant/static_visitor.hpp>
 
 
-#define _DECL_OPERATOR_VISITOR(ros_msg_type) \
-    bool operator()(const ros_msg_type& ros_msg)
+#define _DECL_OPERATOR_VISITOR(ros_msg_type)     bool operator()(const ros_msg_type& ros_msg)
 
 
 class SBGLogtoROSPublisher;
@@ -34,12 +44,21 @@ public:
     // TODO: ca serait pas mal de pouvoir itérer (compile time) sur la liste
     // des types de la boost::variant ... mais pas encore trouvé comment faire
     // ça :-/
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogImuData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogMagCalib);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogEkfQuatData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogDvlData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogUsblData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogPressureData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogFastImuData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogOdometerData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogStatusData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogEkfEulerData);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogShipMotionData);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogEkfNavData);
-    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogEkfEulerData);
     _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogUtcData);
-    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogStatusData);
-    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogImuData);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogMag);
+    _DECL_OPERATOR_VISITOR(sbg_driver::SbgLogDebug0Data);
 
 private:
     // utilisation de la forme templatisée de l'operator de visitor

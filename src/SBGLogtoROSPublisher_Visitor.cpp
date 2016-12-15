@@ -2,17 +2,23 @@
 #include "SBGLogtoROSPublisher.h"
 #include "ros/ros.h"
 
-#define _IMP_OPERATOR_VISITOR(ros_msg_type)                                 \
-    bool visitor_sbglog_to_ros::operator()(const ros_msg_type& ros_msg) {   \
-    return _operator<ros_msg_type>(ros_msg);                                \
-    }
+#define _IMP_OPERATOR_VISITOR(ros_msg_type)                                     bool visitor_sbglog_to_ros::operator()(const ros_msg_type& ros_msg) {       return _operator<ros_msg_type>(ros_msg);                                    }
 
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogImuData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogMagCalib)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogEkfQuatData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogDvlData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogUsblData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogPressureData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogFastImuData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogOdometerData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogStatusData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogEkfEulerData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogShipMotionData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogEkfNavData)
-_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogEkfEulerData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogUtcData)
-_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogStatusData)
-_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogImuData)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogMag)
+_IMP_OPERATOR_VISITOR(sbg_driver::SbgLogDebug0Data)
 
 template <typename T>
 bool visitor_sbglog_to_ros::_operator(const T& ros_msg_with_SBGData)
