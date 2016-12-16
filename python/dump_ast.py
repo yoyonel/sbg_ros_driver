@@ -213,6 +213,7 @@ def extract_enums_from_comments(_sblog_types, _prefix_for_enum='SBG_ECOM_LOG_'):
     return [sbglog._replace(enum=extract_enum_from_comment(sbglog.enum, _prefix_for_enum))
             for sbglog in _sblog_types]
 
+
 def apply_filters(n, _filters):
     """
 
