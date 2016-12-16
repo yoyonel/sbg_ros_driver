@@ -53,7 +53,7 @@ typedef union _SbgBinaryLogData
 	SbgLogShipMotionData	shipMotionData;		/*!< Stores data for the SBG_ECOM_LOG_SHIP_MOTION or SBG_ECOM_LOG_SHIP_MOTION_HP message. */
 	SbgLogOdometerData		odometerData;		/*!< Stores data for the SBG_ECOM_LOG_ODO_VEL message. */
 	SbgLogUtcData			utcData;			/*!< Stores data for the SBG_ECOM_LOG_UTC_TIME message. */
-	SbgLogGpsPos			gpsPosData;			/*!< Stores data for the SBG_ECOM_LOG_GPS_POS message. */
+    SbgLogGpsPos			gpsPosData;			/*!< Stores data for the SBG_ECOM_LOG_GPS#_POS message. */
 	SbgLogGpsVel			gpsVelData;			/*!< Stores data for the SBG_ECOM_LOG_GPS#_VEL message. */
 	SbgLogGpsHdt			gpsHdtData;			/*!< Stores data for the SBG_ECOM_LOG_GPS#_HDT message. */
 	SbgLogGpsRaw			gpsRawData;			/*!< Stores data for the SBG_ECOM_LOG_GPS#_RAW message. */
