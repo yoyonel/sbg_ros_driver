@@ -275,3 +275,19 @@ install(FILES
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+
+## Declare a C++ executable
+add_std_cxx11_flag("src/test/wrapper.cpp")
+
+add_executable(
+    wrapper
+    src/test/wrapper.cpp
+)
+
+target_link_libraries(
+    wrapper
+    ${catkin_LIBRARIES}
+    sbgECom
+)
