@@ -8,7 +8,7 @@ import os
 from functools import partial
 from collections import namedtuple
 from mako.template import Template  # url: http://docs.makotemplates.org/en/latest/usage.html
-
+from copy import deepcopy
 
 NTTypedef = namedtuple('typedef', ['name', 'fields', 'header'])
 NTSBGLog = namedtuple('sbglog', ['var', 'type', 'enum'])
@@ -89,7 +89,10 @@ def filter_source_filename(n, location_filename=""):
     :param location_filename:
     :return:
     """
-    return n.location.file.name == location_filename if location_filename else True
+    try:
+        return n.location.file.name == location_filename if location_filename else True
+    except:
+        return False
 
 
 def is_typedef_decl(n):
@@ -99,6 +102,15 @@ def is_typedef_decl(n):
     :return:
     """
     return n.kind == clang.cindex.CursorKind.TYPEDEF_DECL
+
+
+def is_enum_constant_decl(n):
+    """
+
+    :param n:
+    :return:
+    """
+    return n.kind == clang.cindex.CursorKind.ENUM_CONSTANT_DECL
 
 
 def is_union_decl(n):
@@ -396,6 +408,17 @@ def expand_sbglogs(sbglogs):
 
 
 if __name__ == "__main__":
+    # clang.cindex.Config.set_library_file('/usr/local/lib/libclang.so')
+    clang.cindex.Config.set_library_file('/usr/lib/llvm-3.8/lib/libclang.so.1')
+    index = clang.cindex.Index.create()
+    list_options_for_clang = [
+        '-Xclang', '-std=c', '-ast-dump', '-fsyntax-only',
+        '-D__CODE_GENERATOR__',
+        '-I{}'.format(os.path.abspath('../sbgECom/src')),
+        '-I{}'.format(os.path.abspath('../sbgECom/src/binaryLogs')),
+        '-I{}'.format(os.path.abspath('../sbgECom/common')),
+    ]
+
     if len(sys.argv) != 2:
         print("Usage: dump_ast.py [header file name]")
         sys.exit()
@@ -416,19 +439,6 @@ if __name__ == "__main__":
     ##########################################################################
 
     ##########################################################################
-    # clang.cindex.Config.set_library_file('/usr/local/lib/libclang.so')
-    clang.cindex.Config.set_library_file('/usr/lib/llvm-3.8/lib/libclang.so.1')
-    index = clang.cindex.Index.create()
-    # translation_unit = index.parse(sys.argv[1], ['-x', 'c++', '-std=c++11', '-D__CODE_GENERATOR__'])
-    # translation_unit = index.parse(sys.argv[1], ['-x', 'c', '-D__CODE_GENERATOR__'])
-
-    list_options_for_clang = [
-        '-Xclang', '-std=c', '-ast-dump', '-fsyntax-only',
-        '-D__CODE_GENERATOR__',
-        '-I{}'.format(os.path.abspath('../sbgECom/src')),
-        '-I{}'.format(os.path.abspath('../sbgECom/src/binaryLogs')),
-        '-I{}'.format(os.path.abspath('../sbgECom/common')),
-    ]
 
     translation_unit = index.parse(
         filename,
@@ -482,7 +492,49 @@ if __name__ == "__main__":
     #                           bound_node_children,
     #                           print_node))
     ##########################################################################
-    # sbglogs_filtered = filter(lambda sbglob: '#' not in sbglob.enum, expand_sbglogs(sbglogs))
+    # filtre les enums avec des '#' car pas encore traité ce cas
     sbglogs_filtered = filter(lambda sbglob: all('#' not in enum for enum in sbglob.enum), sbglogs)
+
     print("\n".join(str(sbglog) for sbglog in sbglogs_filtered))
+
+    # Generate .h .cpp sources files from sbglogs analysis.
+    # generate_cpp_files(sbglogs_filtered)
+
+    #
+    filename = '/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/sbgEComIds.h'
+    tu = index.parse(
+        filename,
+        list_options_for_clang
+    )
+    #
+    bound_check_filename = partial(filter_source_filename, location_filename=filename)
+    bound_node_children = partial(node_children, filter=bound_check_filename)
+    print(asciitree.draw_tree(tu.cursor,
+                              bound_node_children,
+                              print_node))
+    #
+    list_enums = list(n.spelling
+                      for n in iter_nodes(tu.cursor.walk_preorder(),
+                                          [bound_check_filename, is_enum_constant_decl]))
+    #
+    sbglogs_enums_contains_sharp = filter(lambda sbglob: not all('#' not in enum for enum in sbglob.enum), sbglogs)
+    for sbglog in sbglogs_enums_contains_sharp:
+        enums = sbglog.enum
+        for enum in enums:
+            if '#' in enum:
+                regexp = enum.replace('#', '(.*)')
+                found_enums = list(set(filter(lambda enum: re.search(regexp, enum), list_enums)))
+                print("{} -> {}".format(enum, found_enums))
+                #
+                for new_enum in found_enums:
+                    new_sbglog = sbglog._replace(enum=[new_enum])
+                    # pour etendre la liste des types logs qu'on gère
+                    # sbglogs_filtered.append(new_sbglog)
+
+    print("\n".join(map(str, sbglogs_filtered)))
+
+    # Generate .h .cpp sources files from sbglogs analysis.
     generate_cpp_files(sbglogs_filtered)
+
+
+
