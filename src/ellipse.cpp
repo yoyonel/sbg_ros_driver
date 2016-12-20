@@ -33,27 +33,34 @@ void test_wrapper(WrapperSBG2ROS& wrapper)
     const SbgLogShipMotionData ship_motion_data = {0, 11, 12, {1, 2, 3},
                                                    {5, 6, 7}, {8, 9, 10}};
 
+    SbgBinaryLogData genericLogData;
     //
     //    wrapper.publish<SBG_ECOM_LOG_EKF_QUAT>((const SbgBinaryLogData*)(&quat_data));
     //    wrapper.publish<SBG_ECOM_LOG_EKF_NAV>((const SbgBinaryLogData*)(&nav_data));
     //    wrapper.publish<SBG_ECOM_LOG_SHIP_MOTION>((const SbgBinaryLogData*)(&ship_motion_data));
+
     try {
+        memcpy(&genericLogData.ekfQuatData, &quat_data, sizeof(SbgLogEkfQuatData));
         wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT,
-                              (SbgBinaryLogData*)(&quat_data));
+                              &genericLogData);
     }
     catch(SbgEComMsgIdException& err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
     }
+
     try {
+        memcpy(&genericLogData.ekfNavData, &nav_data, sizeof(SbgLogEkfNavData));
         wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV,
-                              (SbgBinaryLogData*)(&nav_data));
+                              &genericLogData);
     }
     catch(SbgEComMsgIdException& err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
     }
+
     try {
+        memcpy(&genericLogData.shipMotionData, &ship_motion_data, sizeof(SbgLogShipMotionData));
         wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION,
-                              (SbgBinaryLogData*)(&ship_motion_data));
+                              &genericLogData);
     }
     catch(SbgEComMsgIdException& err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
@@ -114,7 +121,7 @@ int main(int argc, char **argv)
     }
     ROS_INFO("START RECEIVING DATA");
 
-    SBGLogtoROSMsg sbglogparser_to_ros(n, private_nh);
+//    SBGLogtoROSMsg sbglogparser_to_ros(n, private_nh);
     WrapperSBG2ROS wrapper(n);
 
     ros::Rate loop_rate(25);
