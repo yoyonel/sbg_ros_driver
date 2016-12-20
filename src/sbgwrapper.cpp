@@ -12,7 +12,8 @@ void SBGWrapper::initialize()
 
     THROW_EXCEPTION(getDeviceInfo, sbgEComCmdGetInfoException);
 
-    log_parser.reset(new SBGLogParser(n, private_nh));
+//    log_parser.reset(new SBGLogParser(n, private_nh));
+    log_parser.reset(new WrapperSBG2ROS(n, private_nh));
     log_parser->init();
 }
 
@@ -106,13 +107,21 @@ void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
 }
 
 // test de spécialisation du LogParser: 'SBGLogParserImp'
-//void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-//                                        SBGLogtoROSMsg* _this)
-//{
-//    sbgEComSetReceiveLogCallback(&_comHandle,
-//                                 SBGLogParser::static_onLogReceived<SBGLogtoROSMsg>,
-//                                 _this);
-//}
+void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
+                                        SBGLogtoROSMsg* _this)
+{
+    sbgEComSetReceiveLogCallback(&_comHandle,
+                                 SBGLogParser::static_onLogReceived<SBGLogtoROSMsg>,
+                                 _this);
+}
+
+void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
+                                        WrapperSBG2ROS* _this)
+{
+    sbgEComSetReceiveLogCallback(&_comHandle,
+                                 SBGLogParser::static_onLogReceived<WrapperSBG2ROS>,
+                                 _this);
+}
 
 
 SbgErrorCode SBGWrapper::set_callback_for_logs()

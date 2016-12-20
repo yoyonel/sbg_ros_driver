@@ -1,0 +1,46 @@
+#ifndef WRAPPER_SPECIALIZATION_H
+#define WRAPPER_SPECIALIZATION_H
+
+#include "sbgECom.h"    // for SbgLog*Data
+#include <unordered_map>    // for std::unordered_map
+
+// include des headers des messages ROS
+% for sbglog_type in sbglogs_types:
+#include "sbg_driver/${sbglog_type}.h"  // for sbg_driver::${sbglog_type}
+% endfor
+
+//----------------------------------------------------------------------------------
+// Association des enums log de sbg aux ros msg type par spécialisation de templates
+//----------------------------------------------------------------------------------
+
+const std::unordered_map<SbgEComMsgId, SbgEComLog> map_int_to_sbgecomlog = {
+% for sbglog in sbglogs:
+    % for enum in sbglog.enum:
+    {static_cast<SbgEComMsgId>(${enum}), ${enum}},
+    %endfor
+%endfor
+};
+
+const std::unordered_map<SbgEComMsgId, const char*> map_msg_to_string = {
+% for sbglog in sbglogs:
+    % for enum in sbglog.enum:
+    {static_cast<SbgEComMsgId>(${enum}), "${enum}"},
+    %endfor
+%endfor
+};
+
+template <SbgEComLog enum_log>
+struct SBGLogEnum_Types {
+};
+% for sbglog in sbglogs:
+    % for enum in sbglog.enum:
+
+template <>
+struct SBGLogEnum_Types<${enum}> {
+    typedef ${sbglog.type} t_sbglog;
+    typedef sbg_driver::${sbglog.type} t_rosmsg;
+};
+    % endfor
+% endfor
+
+#endif
