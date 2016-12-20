@@ -14,6 +14,7 @@
 //
 #include "sbglogparser.h"
 #include "sbglogparser2.h"  // test de spécialisation d'un LogParser
+#include "wrapper.h"  // test de spécialisation d'un LogParser
 //
 #include "sbgexceptions.h"
 #include "sbgconfiguration.h"
@@ -57,7 +58,8 @@ protected:
     SbgErrorCode handle_sbgECom();
 
     void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogParser *_this);
-//    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogtoROSMsg *_this);
+    void _set_callback_for_logs(SbgEComHandle &_comHandle, SBGLogtoROSMsg *_this);
+    void _set_callback_for_logs(SbgEComHandle &_comHandle, WrapperSBG2ROS *_this);
 
 
 private:

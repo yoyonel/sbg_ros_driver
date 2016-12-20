@@ -24,7 +24,7 @@ def node_children(node, filter=lambda n: True):
     return (c for c in node.get_children() if filter(c))
 
 
-def print_node(node):
+def node_to_string(node):
     """
 
     :param node:
@@ -32,6 +32,11 @@ def print_node(node):
     """
     text = node.spelling or node.displayname
     kind = str(node.kind)[str(node.kind).index('.') + 1:]
+
+    if is_integer_litteral(node):
+        return '{} = {}'.format(
+            node.kind,
+            node.get_tokens().next().spelling)
 
     # node.raw_comment
 
@@ -140,49 +145,62 @@ def is_constantarray_type(n):
     return n.type.kind == clang.cindex.TypeKind.CONSTANTARRAY
 
 
-def extract_tuples_sbglog_types(tu, _filter=lambda n: True):
+def is_integer_litteral(n):
     """
 
-    :param tu:
+    :param n:
+    :return:
+    """
+    return n.kind == clang.cindex.CursorKind.INTEGER_LITERAL
+
+
+def extract_tuples_sbglog_types(_tu, _filter=lambda n: True):
+    """
+
+    :param _tu:
     :param _filter:
     :return:
     """
+    # liste des associations enums/types des logs utilisés par SBG
     l_sblog_types = []
 
-    def extract_from_field(node_level_field):
+    def walk_into_field(node_field):
         """
+        Forme un tuple 'NTSBGLog' depuis un 'field' déclaration.
+        Création de ce tuple à partir des informations issues du noeuds:
+        - nom de la variable
+        - nom du type de la variable
+        - commentaire associé à la variable
 
-        :param node_level_field:
-        :return:
+        :param node_field:
         """
-        node_type = node_level_field.type
-        # print('\t\t{} [{} bytes] {} - {}'.format(node_type.spelling, node_type.get_size(),
-        # node.spelling, node.raw_comment))
-        # return str(node_type.spelling), str(node_level_field.raw_comment), str(node_level_field.spelling)
-        return NTSBGLog(var=node_level_field.spelling,
-                        type=node_type.spelling,
-                        enum=node_level_field.raw_comment)
+        l_sblog_types.append(NTSBGLog(var=node_field.spelling,
+                                      type=node_field.type.spelling,
+                                      enum=node_field.raw_comment))
 
-    def extract_from_union(node_level_typedef):
+    def walk_into_union(node_union):
         """
+        Recherche les 'fields' déclarations d'un union
 
-        :param node_level_typedef:
-        :return:
+        :param node_union:
         """
-        for node_from_union in iter_nodes(node_level_typedef.get_children(), [is_field_decl]):
-            l_sblog_types.append(extract_from_field(node_from_union))
+        for node_from_union in iter_nodes(node_union.get_children(), [is_field_decl]):
+            walk_into_field(node_from_union)
 
-    def extract_from_typedef(node_level_root):
+    def walk_into_typedef(node_typedef):
         """
+        Recherche les 'union' déclarations présents dans un typedef
 
-        :param node_level_root:
-        :return:
+        :param node_typedef:
         """
-        for node_from_typedef in iter_nodes(node_level_root.get_children(), [is_union_decl]):
-            extract_from_union(node_from_typedef)
+        for node_from_typedef in iter_nodes(node_typedef.get_children(), [is_union_decl]):
+            walk_into_union(node_from_typedef)
 
-    for node_from_root in iter_nodes(tu.cursor.walk_preorder(), [is_typedef_decl, _filter]):
-        extract_from_typedef(node_from_root)
+    # Walking initial dans les noeuds
+    # On parcourt depuis le root vers les noeuds 'typedef'
+    # (c'est dans les noeuds 'typedef' qu'il y a les informations qui nous intéressent
+    for node_from_root in iter_nodes(_tu.cursor.walk_preorder(), [is_typedef_decl, _filter]):
+        walk_into_typedef(node_from_root)
 
     return l_sblog_types
 
@@ -397,6 +415,24 @@ def generate_cpp_files(sbglogs, **kwargs):
     with open(filename_output, 'w') as fo:
         fo.write(gen_source_file.encode(ouput_encoding))
 
+    # wrapper_specialization.h
+    filename_input = kwargs.get('filename_wrapper_header_template', 'mako/wrapper_specialization.h.txt')
+    filename_output = kwargs.get('filename_wrapper_header_template',
+                                 'gen/mako/wrapper_specialization.h')
+    template = Template(filename=filename_input, input_encoding=input_encoding)
+    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
+    with open(filename_output, 'w') as fo:
+        fo.write(gen_source_file.encode(ouput_encoding))
+
+    # wrapper.h
+    filename_input = kwargs.get('filename_wrapper_header_template', 'mako/wrapper.h.txt')
+    filename_output = kwargs.get('filename_wrapper_header_template',
+                                 'gen/mako/wrapper.h')
+    template = Template(filename=filename_input, input_encoding=input_encoding)
+    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
+    with open(filename_output, 'w') as fo:
+        fo.write(gen_source_file.encode(ouput_encoding))
+
 
 def expand_sbglogs(sbglogs):
     """
@@ -434,31 +470,26 @@ if __name__ == "__main__":
     headers = extract_headers(sourcefile)
     for header in headers:
         print(header + ".h")
-
-    path_to_headers = "/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/"
     ##########################################################################
 
     ##########################################################################
-
     translation_unit = index.parse(
         filename,
         list_options_for_clang
     )
-
     # translation_unit.save(filename+'.ast')
 
     bound_check_filename = partial(filter_source_filename, location_filename=filename)
     bound_node_children = partial(node_children, filter=bound_check_filename)
     print(asciitree.draw_tree(translation_unit.cursor,
                               bound_node_children,
-                              print_node))
+                              node_to_string))
     # print(translation_unit.spelling)
 
     ###########################################
     # Association des types des sbglog avec les enums
     ###########################################
     sblog_types = extract_tuples_sbglog_types(translation_unit, bound_check_filename)
-    # print("\n".join(", ".join(sblog_type) for sblog_type in sblog_types))
 
     # for sbglog_type, enums, sbglog_var in associate_sbglog_type_with_enums(sblog_types):
     sbglogs = extract_enums_from_comments(sblog_types)
@@ -511,7 +542,7 @@ if __name__ == "__main__":
     bound_node_children = partial(node_children, filter=bound_check_filename)
     print(asciitree.draw_tree(tu.cursor,
                               bound_node_children,
-                              print_node))
+                              node_to_string))
     #
     list_enums = list(n.spelling
                       for n in iter_nodes(tu.cursor.walk_preorder(),
@@ -529,7 +560,7 @@ if __name__ == "__main__":
                 for new_enum in found_enums:
                     new_sbglog = sbglog._replace(enum=[new_enum])
                     # pour etendre la liste des types logs qu'on gère
-                    # sbglogs_filtered.append(new_sbglog)
+                    sbglogs_filtered.append(new_sbglog)
 
     print("\n".join(map(str, sbglogs_filtered)))
 

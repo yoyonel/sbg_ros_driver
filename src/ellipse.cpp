@@ -1,13 +1,15 @@
 ﻿#include "ros/ros.h"
 //
 #include "sbgwrapper.h"
+//
+#include "wrapper.h"
 
 void test_sbglogparser(SBGLogtoROSMsg& log_parser)
 {    
     //
     const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
     const SbgLogEkfNavData nav_data = {0, {1, 2, 3}, {5, 6, 7}, {8, 9, 10}, 11,
-                                 {12, 13, 14}, 15};
+                                       {12, 13, 14}, 15};
     const SbgLogShipMotionData ship_motion_data = {0, 11, 12, {1, 2, 3},
                                                    {5, 6, 7}, {8, 9, 10}};
     // Cast à l'ancienne (mode C) car l'API est une API en C (à l'ancienne).
@@ -19,7 +21,43 @@ void test_sbglogparser(SBGLogtoROSMsg& log_parser)
                              (SbgBinaryLogData*)(&ship_motion_data));
 
     // Exception Boost: bad call function
-//    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
+    //    log_parser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION_HP, NULL);
+}
+
+void test_wrapper(WrapperSBG2ROS& wrapper)
+{
+    //
+    const SbgLogEkfQuatData quat_data = {0, {1, 2, 3, 4}, {5, 6, 7}, 8};
+    const SbgLogEkfNavData nav_data = {0, {1, 2, 3}, {5, 6, 7}, {8, 9, 10}, 11,
+                                       {12, 13, 14}, 15};
+    const SbgLogShipMotionData ship_motion_data = {0, 11, 12, {1, 2, 3},
+                                                   {5, 6, 7}, {8, 9, 10}};
+
+    //
+    //    wrapper.publish<SBG_ECOM_LOG_EKF_QUAT>((const SbgBinaryLogData*)(&quat_data));
+    //    wrapper.publish<SBG_ECOM_LOG_EKF_NAV>((const SbgBinaryLogData*)(&nav_data));
+    //    wrapper.publish<SBG_ECOM_LOG_SHIP_MOTION>((const SbgBinaryLogData*)(&ship_motion_data));
+    try {
+        wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT,
+                              (SbgBinaryLogData*)(&quat_data));
+    }
+    catch(SbgEComMsgIdException& err) {
+        std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
+    }
+    try {
+        wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV,
+                              (SbgBinaryLogData*)(&nav_data));
+    }
+    catch(SbgEComMsgIdException& err) {
+        std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
+    }
+    try {
+        wrapper.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION,
+                              (SbgBinaryLogData*)(&ship_motion_data));
+    }
+    catch(SbgEComMsgIdException& err) {
+        std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
+    }
 }
 
 int main(int argc, char **argv)
@@ -74,9 +112,10 @@ int main(int argc, char **argv)
     } catch (const sbgExceptions& e) {
         ROS_ERROR_STREAM("set callback for logs -> Exception: " << e.what());
     }
-    ROS_INFO("START RECEIVING DATA");    
+    ROS_INFO("START RECEIVING DATA");
 
     SBGLogtoROSMsg sbglogparser_to_ros(n, private_nh);
+    WrapperSBG2ROS wrapper(n);
 
     ros::Rate loop_rate(25);
     while (ros::ok())
@@ -87,7 +126,8 @@ int main(int argc, char **argv)
             ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
         }
 
-        test_sbglogparser(sbglogparser_to_ros);
+        //        test_sbglogparser(sbglogparser_to_ros);
+        test_wrapper(wrapper);
 
         ros::spinOnce();
         loop_rate.sleep();
