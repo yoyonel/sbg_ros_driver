@@ -320,7 +320,7 @@ def extract_typedefs_from_headers(headers):
     return typedefs
 
 
-def generate_ros_msg_attributes_from_typedef(typedef):
+def generate_rosmsg_attributes_from_typedef(typedef):
     """
 
     :param typedef:
@@ -335,7 +335,7 @@ def generate_ros_msg_attributes_from_typedef(typedef):
         yield str_attribute
 
 
-def generate_ros_msg_from_typedef(typedef, **kwargs):
+def generate_rosmsg_from_typedef(typedef, **kwargs):
     """
 
     :param typedef:
@@ -345,10 +345,11 @@ def generate_ros_msg_from_typedef(typedef, **kwargs):
     """
     path_rosmsg = kwargs.get("path", "gen/msg/")
     ext_rosmsg = kwargs.get("ext", ".msg")
+    #
     filename_rosmsg = path_rosmsg + typedef.name + ext_rosmsg
 
     with open(filename_rosmsg, 'w') as fo_ros_msg:
-        fo_ros_msg.writelines("\n".join(generate_ros_msg_attributes_from_typedef(typedef)))
+        fo_ros_msg.writelines("\n".join(generate_rosmsg_attributes_from_typedef(typedef)))
 
 
 def generate_ros_msg_from_typedefs(typedefs, **kwargs):
@@ -359,7 +360,27 @@ def generate_ros_msg_from_typedefs(typedefs, **kwargs):
     :return:
     """
     for typedef in typedefs:
-        generate_ros_msg_from_typedef(typedef, **kwargs)
+        generate_rosmsg_from_typedef(typedef, **kwargs)
+
+
+def generate_cpp_file(input_filename,
+                      output_filename,
+                      input_encoding='utf-8',
+                      output_encoding='utf-8',
+                      **data_for_mako):
+    """
+
+    :param input_filename:
+    :param output_filename:
+    :param input_encoding:
+    :param output_encoding:
+    :param data_for_mako:
+    :return:
+    """
+    template = Template(filename=input_filename, input_encoding=input_encoding)
+    gen_source_file = template.render(**data_for_mako)
+    with open(output_filename, 'w') as fo:
+        fo.write(gen_source_file.encode(output_encoding))
 
 
 def generate_cpp_files(sbglogs, **kwargs):
@@ -369,69 +390,22 @@ def generate_cpp_files(sbglogs, **kwargs):
     :param kwargs:
     :return:
     """
-    sbglogs_types = set(sbglog.type for sbglog in sbglogs)
+    datas_for_mako = {
+        'sbglogs': sbglogs,
+        'sbglogs_types': set(sbglog.type for sbglog in sbglogs)
+    }
 
-    # for ROS Message
-    input_encoding = kwargs.get('input_encoding', 'utf-8')
-    ouput_encoding = kwargs.get('output_encoding', 'utf-8')
-
-    # SBGLogtoROSMsg.h
-    filename_input = kwargs.get('filename_rosmsg_header_template', 'mako/SBGLogtoROSMsg.h.txt')
-    filename_output = kwargs.get('filename_rosmsg_header_export', 'gen/mako/SBGLogtoROSMsg.h')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # SBGLogtoROSMsg.cpp
-    filename_input = kwargs.get('filename_rosmsg_cpp_template', 'mako/SBGLogtoROSMsg.cpp.txt')
-    filename_output = kwargs.get('filename_rosmsg_cpp_export', 'gen/mako/SBGLogtoROSMsg.cpp')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # CMakeLists.txt pour ROS (et les nouveaux messages)
-    filename_input = kwargs.get('filename_cmakelists_template', 'mako/CMakeLists.txt.txt')
-    filename_output = kwargs.get('filename_cmakelists_export', 'gen/mako/CMakeLists.txt')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # SBGLogtoROSPublisher_Visitor.h
-    filename_input = kwargs.get('filename_rospub_visitor_header_template', 'mako/SBGLogtoROSPublisher_Visitor.h.txt')
-    filename_output = kwargs.get('filename_rosmsg_header_export', 'gen/mako/SBGLogtoROSPublisher_Visitor.h')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # SBGLogtoROSPublisher_Visitor.cpp
-    filename_input = kwargs.get('filename_rospub_visitor_cpp_template', 'mako/SBGLogtoROSPublisher_Visitor.cpp.txt')
-    filename_output = kwargs.get('filename_rospub_visitor_cpp_template', 'gen/mako/SBGLogtoROSPublisher_Visitor.cpp')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # wrapper_specialization.h
-    filename_input = kwargs.get('filename_wrapper_header_template', 'mako/wrapper_specialization.h.txt')
-    filename_output = kwargs.get('filename_wrapper_header_template',
-                                 'gen/mako/wrapper_specialization.h')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
-
-    # wrapper.h
-    filename_input = kwargs.get('filename_wrapper_header_template', 'mako/wrapper.h.txt')
-    filename_output = kwargs.get('filename_wrapper_header_template',
-                                 'gen/mako/wrapper.h')
-    template = Template(filename=filename_input, input_encoding=input_encoding)
-    gen_source_file = template.render(sbglogs=sbglogs, sbglogs_types=sbglogs_types)
-    with open(filename_output, 'w') as fo:
-        fo.write(gen_source_file.encode(ouput_encoding))
+    templates_filenames = (
+        ('mako/SBGLogtoROSMsg.h.txt', 'gen/mako/SBGLogtoROSMsg.h'),
+        ('mako/SBGLogtoROSMsg.h.txt', 'gen/mako/SBGLogtoROSMsg.cpp'),
+        ('mako/CMakeLists.txt.txt', 'gen/mako/CMakeLists.txt'),
+        ('mako/SBGLogtoROSPublisher_Visitor.h.txt', 'gen/mako/SBGLogtoROSPublisher_Visitor.h'),
+        ('mako/SBGLogtoROSPublisher_Visitor.cpp.txt', 'gen/mako/SBGLogtoROSPublisher_Visitor.cpp'),
+        ('mako/wrapper_specialization.h.txt', 'gen/mako/wrapper_specialization.h'),
+        ('mako/wrapper.h.txt', 'gen/mako/wrapper.h')
+    )
+    for import_filename, export_filename in templates_filenames:
+        generate_cpp_file(import_filename, export_filename, **datas_for_mako)
 
 
 def expand_sbglogs(sbglogs):
@@ -440,7 +414,9 @@ def expand_sbglogs(sbglogs):
     :param sbglogs:
     :return:
     """
-    return (NTSBGLog(sbglog.var, sbglog.type, enum) for sbglog in sbglogs for enum in sbglog.enum)
+    return (NTSBGLog(sbglog.var, sbglog.type, sbglog_enum)
+            for sbglog in sbglogs
+            for sbglog_enum in sbglog.enum)
 
 
 if __name__ == "__main__":
@@ -566,6 +542,3 @@ if __name__ == "__main__":
 
     # Generate .h .cpp sources files from sbglogs analysis.
     generate_cpp_files(sbglogs_filtered)
-
-
-
