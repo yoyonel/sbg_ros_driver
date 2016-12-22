@@ -2,7 +2,7 @@
 #define SBGLOGTOROSMSG_H
 
 #include "ros/ros.h"
-
+#include "sbglogparser/isbglogparser.h"
 //
 #include "SBGLogtoROSPublisher.h"
 
@@ -31,10 +31,12 @@
 #include <boost/variant.hpp>
 
 // Bridge SBG Logs Datas to ROS Messages
-class SBGLogtoROSMsg {
+namespace sbglogparser_boost {
+class SBGLogParser : public ISBGLogParser {
 public:
-    SBGLogtoROSMsg(ros::NodeHandle _n=ros::NodeHandle(),
-                   ros::NodeHandle _private_nh=ros::NodeHandle("~"))
+    SBGLogParser(ros::NodeHandle _n=ros::NodeHandle(),
+                   ros::NodeHandle _private_nh=ros::NodeHandle("~")) :
+        ISBGLogParser(_n, _private_nh)
     {
         sbglog_rospublisher.reset(new SBGLogtoROSPublisher(_n, _private_nh));
     }
@@ -43,7 +45,10 @@ public:
     SbgErrorCode onLogReceived(SbgEComHandle *pHandle,
                                SbgEComClass msgClass,
                                SbgEComMsgId msg,
-                               const SbgBinaryLogData *pLogData);
+                               const SbgBinaryLogData *pLogData) override;
+
+	virtual void init() override {}
+	virtual void publish() override {}
 
 private:    
     // -------------------------------------------------------------------------
@@ -95,7 +100,7 @@ private:
 	bv_sbglog_data parser_for_SbgLogDvlData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogUsblData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogPressureData	(const SbgBinaryLogData *pLogData) const;
-	bv_sbglog_data parser_for_SbgLogFastImuData	(const SbgBinaryLogData *pLogData) const;
+//	bv_sbglog_data parser_for_SbgLogFastImuData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogOdometerData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogStatusData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogEkfEulerData	(const SbgBinaryLogData *pLogData) const;
@@ -103,30 +108,31 @@ private:
 	bv_sbglog_data parser_for_SbgLogEkfNavData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogUtcData	(const SbgBinaryLogData *pLogData) const;
 	bv_sbglog_data parser_for_SbgLogMag	(const SbgBinaryLogData *pLogData) const;
-	bv_sbglog_data parser_for_SbgLogDebug0Data	(const SbgBinaryLogData *pLogData) const;
+//	bv_sbglog_data parser_for_SbgLogDebug0Data	(const SbgBinaryLogData *pLogData) const;
     
-	typedef boost::function<bv_sbglog_data(const SBGLogtoROSMsg*, const SbgBinaryLogData*)> fun_t;
+    typedef boost::function<bv_sbglog_data(const SBGLogParser*, const SbgBinaryLogData*)> fun_t;
 	typedef std::map<const SbgEComLog, const fun_t> funs_t;
 	funs_t f = {
-        { SBG_ECOM_LOG_STATUS,    &SBGLogtoROSMsg::parser_for_SbgLogStatusData  }
-	    ,{ SBG_ECOM_LOG_IMU_DATA,    &SBGLogtoROSMsg::parser_for_SbgLogImuData	}
-	    ,{ SBG_ECOM_LOG_EKF_EULER,    &SBGLogtoROSMsg::parser_for_SbgLogEkfEulerData	}
-	    ,{ SBG_ECOM_LOG_EKF_QUAT,    &SBGLogtoROSMsg::parser_for_SbgLogEkfQuatData	}
-	    ,{ SBG_ECOM_LOG_EKF_NAV,    &SBGLogtoROSMsg::parser_for_SbgLogEkfNavData	}
-	    ,{ SBG_ECOM_LOG_SHIP_MOTION,    &SBGLogtoROSMsg::parser_for_SbgLogShipMotionData	}
-	    ,{ SBG_ECOM_LOG_SHIP_MOTION_HP,    &SBGLogtoROSMsg::parser_for_SbgLogShipMotionData	}
-	    ,{ SBG_ECOM_LOG_ODO_VEL,    &SBGLogtoROSMsg::parser_for_SbgLogOdometerData	}
-	    ,{ SBG_ECOM_LOG_UTC_TIME,    &SBGLogtoROSMsg::parser_for_SbgLogUtcData	}
-	    ,{ SBG_ECOM_LOG_MAG,    &SBGLogtoROSMsg::parser_for_SbgLogMag	}
-	    ,{ SBG_ECOM_LOG_MAG_CALIB,    &SBGLogtoROSMsg::parser_for_SbgLogMagCalib	}
-	    ,{ SBG_ECOM_LOG_DVL_BOTTOM_TRACK,    &SBGLogtoROSMsg::parser_for_SbgLogDvlData	}
-	    ,{ SBG_ECOM_LOG_PRESSURE,    &SBGLogtoROSMsg::parser_for_SbgLogPressureData	}
-	    ,{ SBG_ECOM_LOG_USBL,    &SBGLogtoROSMsg::parser_for_SbgLogUsblData	}
+        { SBG_ECOM_LOG_STATUS,    &SBGLogParser::parser_for_SbgLogStatusData  }
+        ,{ SBG_ECOM_LOG_IMU_DATA,    &SBGLogParser::parser_for_SbgLogImuData	}
+        ,{ SBG_ECOM_LOG_EKF_EULER,    &SBGLogParser::parser_for_SbgLogEkfEulerData	}
+        ,{ SBG_ECOM_LOG_EKF_QUAT,    &SBGLogParser::parser_for_SbgLogEkfQuatData	}
+        ,{ SBG_ECOM_LOG_EKF_NAV,    &SBGLogParser::parser_for_SbgLogEkfNavData	}
+        ,{ SBG_ECOM_LOG_SHIP_MOTION,    &SBGLogParser::parser_for_SbgLogShipMotionData	}
+        ,{ SBG_ECOM_LOG_SHIP_MOTION_HP,    &SBGLogParser::parser_for_SbgLogShipMotionData	}
+        ,{ SBG_ECOM_LOG_ODO_VEL,    &SBGLogParser::parser_for_SbgLogOdometerData	}
+        ,{ SBG_ECOM_LOG_UTC_TIME,    &SBGLogParser::parser_for_SbgLogUtcData	}
+        ,{ SBG_ECOM_LOG_MAG,    &SBGLogParser::parser_for_SbgLogMag	}
+        ,{ SBG_ECOM_LOG_MAG_CALIB,    &SBGLogParser::parser_for_SbgLogMagCalib	}
+        ,{ SBG_ECOM_LOG_DVL_BOTTOM_TRACK,    &SBGLogParser::parser_for_SbgLogDvlData	}
+        ,{ SBG_ECOM_LOG_PRESSURE,    &SBGLogParser::parser_for_SbgLogPressureData	}
+        ,{ SBG_ECOM_LOG_USBL,    &SBGLogParser::parser_for_SbgLogUsblData	}
 	};
     // -------------------------------------------------------------------------
 
     boost::shared_ptr<SBGLogtoROSPublisher> sbglog_rospublisher;
 };
+}
 
 #endif // SBGLOGTOROSMSG_H
 

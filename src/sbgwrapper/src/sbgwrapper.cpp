@@ -1,21 +1,21 @@
-#include "sbgwrapper.h"
+#include "sbgwrapper/sbgwrapper.h"
 #include "ros/ros.h"
 
 
-void SBGWrapper::initialize()
-{
-    THROW_EXCEPTION(createSerialInterface, sbgInterfaceSerialCreateException);
-    serialinterface_is_init = true;
+//void SBGWrapper::initialize()
+//{
+//    THROW_EXCEPTION(createSerialInterface, sbgInterfaceSerialCreateException);
+//    serialinterface_is_init = true;
 
-    THROW_EXCEPTION(initECom, sbgEComInitException);
-    ecom_is_init = true;
+//    THROW_EXCEPTION(initECom, sbgEComInitException);
+//    ecom_is_init = true;
 
-    THROW_EXCEPTION(getDeviceInfo, sbgEComCmdGetInfoException);
+//    THROW_EXCEPTION(getDeviceInfo, sbgEComCmdGetInfoException);
 
-//    log_parser.reset(new SBGLogParser(n, private_nh));
-    log_parser.reset(new WrapperSBG2ROS(n, private_nh));
-    log_parser->init();
-}
+////    log_parser.reset(new SBGLogParser(n, private_nh));
+//    log_parser.reset(new WrapperSBG2ROS(n, private_nh));
+//    log_parser->init();
+//}
 
 SbgErrorCode SBGWrapper::createSerialInterface()
 {
@@ -92,38 +92,6 @@ void SBGWrapper::handle_logs()
         log_parser->publish();
 }
 
-void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-                                        SBGLogParser* _this)
-{
-    // On set le callback sur une fonction locale (statique)
-    // On utilise 'pUserArg' pour transmettre le pointeur sur l'instance de la
-    // classe SBGWrapper (this).
-    // Ainsi dans le callback, on doit pouvoir reprendre la main sur notre classe
-    // wrapper.
-    //    sbgEComSetReceiveLogCallback(&_comHandle, onLogReceived_, _this);
-    sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::static_onLogReceived<SBGLogParser>,
-                                 _this);
-}
-
-// test de spécialisation du LogParser: 'SBGLogParserImp'
-void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-                                        SBGLogtoROSMsg* _this)
-{
-    sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::static_onLogReceived<SBGLogtoROSMsg>,
-                                 _this);
-}
-
-void SBGWrapper::_set_callback_for_logs(SbgEComHandle &_comHandle,
-                                        WrapperSBG2ROS* _this)
-{
-    sbgEComSetReceiveLogCallback(&_comHandle,
-                                 SBGLogParser::static_onLogReceived<WrapperSBG2ROS>,
-                                 _this);
-}
-
-
 SbgErrorCode SBGWrapper::set_callback_for_logs()
 {
     SbgErrorCode errCode = SBG_ERROR;
@@ -145,7 +113,7 @@ SbgErrorCode SBGWrapper::set_callback_for_logs()
 ////----------------------------------------------------
 //// Publisher
 ////----------------------------------------------------
-//// Déclaration (à ROS) d'un PUBLISHER
+//// Dï¿½claration (ï¿½ ROS) d'un PUBLISHER
 //std::string _name = "SbgEComDeviceInfo";
 //std::string topic_name_pub_ = _name + "_pub";
 //ros::Publisher SbgEComDeviceInfo_pub_ = n.advertise<sbg_driver::SbgEComDeviceInfo>(topic_name_pub_, 10);

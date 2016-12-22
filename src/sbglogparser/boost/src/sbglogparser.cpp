@@ -1,9 +1,11 @@
-#include "SBGLogtoROSMsg.h"
+#include "sbglogparser/boost/sbglogparser.h"
 //
 #include <boost/exception/all.hpp>
 
+using namespace sbglogparser_boost;
+
 // url: http://stackoverflow.com/questions/16344444/how-to-supplement-boostexception-with-a-proper-what-function
-SbgErrorCode SBGLogtoROSMsg::onLogReceived(SbgEComHandle *pHandle,
+SbgErrorCode SBGLogParser::onLogReceived(SbgEComHandle *pHandle,
                                            SbgEComClass msgClass,
                                            SbgEComMsgId msg,
                                            const SbgBinaryLogData *pLogData)
@@ -24,7 +26,7 @@ SbgErrorCode SBGLogtoROSMsg::onLogReceived(SbgEComHandle *pHandle,
     return errCode;
 }
 
-#define _DEFINE_FUNC_SBGLOG_2_ROSMSG(sbg_log_type, sbg_log_var)        SBGLogtoROSMsg::bv_sbglog_data SBGLogtoROSMsg::parser_for_ ## sbg_log_type(const SbgBinaryLogData* pLogData) const {     sbg_driver::sbg_log_type ros_msg;       if (pLogData) std::memcpy(&ros_msg, &pLogData->sbg_log_var, sizeof(sbg_log_type));       return ros_msg;     }
+#define _DEFINE_FUNC_SBGLOG_2_ROSMSG(sbg_log_type, sbg_log_var)        SBGLogParser::bv_sbglog_data SBGLogParser::parser_for_ ## sbg_log_type(const SbgBinaryLogData* pLogData) const {     sbg_driver::sbg_log_type ros_msg;       if (pLogData) std::memcpy(&ros_msg, &pLogData->sbg_log_var, sizeof(sbg_log_type));       return ros_msg;     }
 //
 _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogStatusData,	statusData)
 _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogImuData,	imuData)
@@ -39,5 +41,5 @@ _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogMagCalib,	magCalibData)
 _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogDvlData,	dvlData)
 _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogPressureData,	pressureData)
 _DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogUsblData,	usblData)
-_DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogDebug0Data,	debug0Data)
-_DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogFastImuData,	fastImuData)
+//_DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogDebug0Data,	debug0Data)
+//_DEFINE_FUNC_SBGLOG_2_ROSMSG(SbgLogFastImuData,	fastImuData)

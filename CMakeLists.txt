@@ -1,29 +1,31 @@
 ﻿cmake_minimum_required(VERSION 2.8.3)
 project(sbg_driver)
 
+cmake_policy(SET CMP0015 NEW)
+
 macro(add_flags SRC_FILES FLAGS)
-#  MESSAGE("Flags list to add: ${FLAGS}")
-#  MESSAGE("to this sources files:")
-  foreach(src ${SRC_FILES})
-#    MESSAGE("-> ${src}")
-    set_source_files_properties(${src} PROPERTIES COMPILE_FLAGS ${FLAGS})
-  endforeach()
+    #  MESSAGE("Flags list to add: ${FLAGS}")
+    #  MESSAGE("to this sources files:")
+    foreach (src ${SRC_FILES})
+        #    MESSAGE("-> ${src}")
+        set_source_files_properties(${src} PROPERTIES COMPILE_FLAGS ${FLAGS})
+    endforeach ()
 endmacro()
 
 macro(add_std_cxx11_flag SRC_FILES)
-  add_flags("${SRC_FILES}" "-std=c++11")
+    add_flags("${SRC_FILES}" "-std=c++11")
 endmacro()
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  sensor_msgs
-  std_msgs
-  #
-  message_generation
-  dynamic_reconfigure
+        roscpp
+        sensor_msgs
+        std_msgs
+#
+        message_generation
+        dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions
@@ -67,31 +69,31 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 # Generate messages in the 'msg' folder
 add_message_files(
-  DIRECTORY msg
-  FILES
-  #
-  SbgLogAbstract.msg
-  #
-  SbgLogStatusData.msg
-  SbgLogImuData.msg
-  SbgLogEkfEulerData.msg
-  SbgLogEkfQuatData.msg
-  SbgLogEkfNavData.msg
-  SbgLogShipMotionData.msg
-  SbgLogOdometerData.msg
-  SbgLogUtcData.msg
-  SbgLogGpsPos.msg
-  SbgLogGpsVel.msg
-  SbgLogGpsHdt.msg
-  SbgLogGpsRaw.msg
-  SbgLogMag.msg
-  SbgLogMagCalib.msg
-  SbgLogDvlData.msg
-  SbgLogPressureData.msg
-  SbgLogUsblData.msg
-  SbgLogEvent.msg
-  SbgLogDebug0Data.msg
-  SbgLogFastImuData.msg
+        DIRECTORY msg
+        FILES
+#
+        SbgLogAbstract.msg
+#
+        SbgLogStatusData.msg
+        SbgLogImuData.msg
+        SbgLogEkfEulerData.msg
+        SbgLogEkfQuatData.msg
+        SbgLogEkfNavData.msg
+        SbgLogShipMotionData.msg
+        SbgLogOdometerData.msg
+        SbgLogUtcData.msg
+        SbgLogGpsPos.msg
+        SbgLogGpsVel.msg
+        SbgLogGpsHdt.msg
+        SbgLogGpsRaw.msg
+        SbgLogMag.msg
+        SbgLogMagCalib.msg
+        SbgLogDvlData.msg
+        SbgLogPressureData.msg
+        SbgLogUsblData.msg
+        SbgLogEvent.msg
+        SbgLogDebug0Data.msg
+        SbgLogFastImuData.msg
 )
 
 
@@ -111,8 +113,8 @@ add_message_files(
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
-  DEPENDENCIES
-  std_msgs
+        DEPENDENCIES
+        std_msgs
 )
 
 ################################################
@@ -131,7 +133,7 @@ generate_messages(
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
 generate_dynamic_reconfigure_options(
-  cfg/ELLIPSE_N_settings.cfg
+        cfg/ELLIPSE_N_settings.cfg
 )
 
 ###################################
@@ -144,13 +146,13 @@ generate_dynamic_reconfigure_options(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  # INCLUDE_DIRS sbgECom
-  # LIBRARIES ${PROJECT_NAME} 
+# INCLUDE_DIRS sbgECom
+# LIBRARIES ${PROJECT_NAME}
 #  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
-  # DEPENDS sbgECom
-  INCLUDE_DIRS
-  LIBRARIES
-  CATKIN_DEPENDS message_runtime std_msgs
+# DEPENDS sbgECom
+        INCLUDE_DIRS
+        LIBRARIES
+        CATKIN_DEPENDS message_runtime std_msgs
 )
 
 ###########
@@ -161,12 +163,12 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
-  ${catkin_INCLUDE_DIRS}
-  #
-  ${PROJECT_SOURCE_DIR}/sbgECom/common
-  ${PROJECT_SOURCE_DIR}/sbgECom/src
-  #
-  ${PROJECT_SOURCE_DIR}/include
+        ${catkin_INCLUDE_DIRS}
+#
+        ${PROJECT_SOURCE_DIR}/sbgECom/common
+        ${PROJECT_SOURCE_DIR}/sbgECom/src
+#
+        ${PROJECT_SOURCE_DIR}/include
 )
 
 # file(GLOB_RECURSE SRC ${PROJECT_SOURCE_DIR}/sbgECom/src/*.c)
@@ -187,48 +189,32 @@ include_directories(
 
 ## Declare a C++ executable
 add_std_cxx11_flag("src/ellipse.cpp")
-add_std_cxx11_flag("src/test/wrapper.cpp")
-add_std_cxx11_flag("src/sbgwrapper.cpp")
-add_std_cxx11_flag("src/sbglogparser.cpp")
-add_std_cxx11_flag("src/sbglogparser2.cpp")
-add_std_cxx11_flag("src/SBGLogtoROSMsg.cpp")
-add_std_cxx11_flag("src/SBGLogtoROSPublisher.cpp")
-add_std_cxx11_flag("src/SBGLogtoROSPublisher_Visitor.cpp")
-add_std_cxx11_flag("include/sbgwrapper.h")
-add_std_cxx11_flag("include/sbglogparser.h")
-add_std_cxx11_flag("include/sbglogparser.inl")
-add_std_cxx11_flag("include/sbglogparser2.h")
-add_std_cxx11_flag("include/SBGLogtoROSMsg.h")
-add_std_cxx11_flag("include/SBGLogtoROSPublisher.h")
-add_std_cxx11_flag("include/SBGLogtoROSPublisher.inl")
-add_std_cxx11_flag("include/SBGLogtoROSPublisher_Visitor.h")
 
 add_executable(
-    ellipse
-    src/test/wrapper.cpp
-    src/ellipse.cpp
-    src/sbgwrapper.cpp
-    src/sbglogparser.cpp
-    src/sbglogparser2.cpp
-    src/SBGLogtoROSMsg.cpp
-    src/SBGLogtoROSPublisher.cpp
-    src/SBGLogtoROSPublisher_Visitor.cpp
-    ${SRC}
-    ${COMMON_SRC}
+        ellipse
+        src/ellipse.cpp
+        ${SRC}
+        ${COMMON_SRC}
 )
 
-target_compile_options(ellipse PRIVATE -fpermissive)
+#target_compile_options(ellipse PRIVATE -fpermissive)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(sbg_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # add_dependencies(ellipse sbgECom)
 
+include(src/sbglogparser/CMakeLists.txt)
+include(src/sbgwrapper/CMakeLists.txt)
+
 ## Specify libraries to link a library or executable target against
 add_subdirectory(sbgECom)
+
 target_link_libraries(ellipse
-   ${catkin_LIBRARIES}
-   sbgECom
+        ${catkin_LIBRARIES}
+        sbglog_parsers
+        sbg_wrapper
+        sbgECom
 )
 
 #############
@@ -247,22 +233,22 @@ target_link_libraries(ellipse
 
 ## Mark executables and/or libraries for installation
 install(TARGETS ellipse
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 ## Mark cpp header files for installation
 install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
-  PATTERN ".svn" EXCLUDE
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+        FILES_MATCHING PATTERN "*.h"
+        PATTERN ".svn" EXCLUDE
 )
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(FILES
-  launch/ELLIPSE_N.launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        launch/ELLIPSE_N.launch
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
 #############

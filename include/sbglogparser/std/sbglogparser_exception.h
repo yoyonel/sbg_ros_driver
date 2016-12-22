@@ -1,9 +1,8 @@
 #ifndef WRAPPER_EXCEPTION_H
 #define WRAPPER_EXCEPTION_H
 
-#include "sbgEComIds.h"    // for SbgEComMsgId
 #include <string>   // for std::string
-#include "wrapper_specialization.h" // for map_msg_to_string
+#include "sbglogparser_specialization.h"
 
 struct WrapperExceptions:std::exception{
     char const *what() const noexcept{

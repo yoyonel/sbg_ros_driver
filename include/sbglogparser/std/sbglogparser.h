@@ -1,37 +1,38 @@
-#ifndef WRAPPER_H
-#define WRAPPER_H
+#ifndef SBGLOGPARSER_STD_H
+#define SBGLOGPARSER_STD_H
 
-#include "sbglogparser.h"
-
-#include "wrapper_specialization.h" // for: SBGLogEnum_Types<>,
-// SbgBinaryLogData, SbgEComLog
-#include "wrapper_exception.h"      // for (customs) Exceptions
-#include "ros/ros.h"    // for: ros::NodeHandle, ros::Publisher
+#include "sbglogparser/isbglogparser.h"  // for ISBGLogParser (& ROS, SBG dependancies)
+#include "sbglogparser_specialization.h"
+#include "sbglogparser_exception.h"
 #include <map>      // for std::map
 #include <memory>   // for std::shared_ptr
 #include <string>   // for std::string
 #include <unordered_map>
+#include <bits/shared_ptr.h>
 
 namespace ros {
 typedef std::shared_ptr<Publisher> PublisherPtr;
 }
 
-struct WrapperSBG2ROS : public SBGLogParser {
-    WrapperSBG2ROS(ros::NodeHandle _n=ros::NodeHandle(),
+namespace sbglogparser_std {
+struct SBGLogParser : public ISBGLogParser {
+    SBGLogParser(ros::NodeHandle _n=ros::NodeHandle(),
                    ros::NodeHandle _private_nh=ros::NodeHandle("~"))
-        : SBGLogParser(_n, _private_nh)
+        : ISBGLogParser(_n, _private_nh)
     {}
 
     void publish(SbgEComMsgId msg, const SbgBinaryLogData *pLogData);
 
     // -------------------------------------------------------------------------
-    // OVERRIDE: des méthodes virtuelles de la classe SBGLogParser
+    // OVERRIDE: des méthodes virtuelles de la classe ISBGLogParser
     // -------------------------------------------------------------------------
     // On ne fait rien (actuellement) dans publish car on publit directement
     // à la réception des messages (par callback).
     // Faudrait voir, si on réintroduit le mécanisme
     // de publication déréférencé (asynchrone).
     void publish() override {}
+
+    void init() override {}
 
     SbgErrorCode onLogReceived(SbgEComHandle *pHandle,
                                SbgEComClass msgClass,
@@ -111,7 +112,8 @@ private:
     };
 
 };
+// Templates implementations
+#include "sbglogparser.inl"
+}   // namespace sbglogparser_std
 
-#include "wrapper.inl"
-
-#endif // WRAPPER_H
+#endif // SBGLOGPARSER_STD_H

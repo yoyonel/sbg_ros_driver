@@ -1,6 +1,7 @@
 ﻿#ifndef SBGEXCEPTIONS_H
 #define SBGEXCEPTIONS_H
 
+#include <exception>
 
 #define THROW_EXCEPTION(func_name, exception_name)   \
     if (func_name() != SBG_NO_ERROR) \

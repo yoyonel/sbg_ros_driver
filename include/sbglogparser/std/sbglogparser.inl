@@ -1,7 +1,7 @@
 template<SbgEComLog enum_log,
          typename TSbgLog,
          typename TRosMsg>
-void WrapperSBG2ROS::publish(const SbgBinaryLogData *pLogData, ros::NodeHandle& n)
+void SBGLogParser::publish(const SbgBinaryLogData *pLogData, ros::NodeHandle& n)
 {
     TRosMsg ros_msg = build_rosmsg<TSbgLog, TRosMsg>(pLogData);
 
@@ -13,7 +13,7 @@ void WrapperSBG2ROS::publish(const SbgBinaryLogData *pLogData, ros::NodeHandle& 
 }
 
 template<typename TSbgLog, typename TRosMsg>
-TRosMsg WrapperSBG2ROS::build_rosmsg(const SbgBinaryLogData *pLogData)
+TRosMsg SBGLogParser::build_rosmsg(const SbgBinaryLogData *pLogData)
 {
     typedef const TSbgLog* TSbgLogPtr;
     typedef const TSbgLog& TSbgLogRef;
@@ -34,7 +34,8 @@ TRosMsg WrapperSBG2ROS::build_rosmsg(const SbgBinaryLogData *pLogData)
 }
 
 template<typename TRosMsg>
-ros::Publisher WrapperSBG2ROS::get_rospub(const SbgEComLog& enum_log, ros::NodeHandle& n)
+ros::Publisher SBGLogParser::get_rospub(const SbgEComLog& enum_log,
+                                        ros::NodeHandle& n)
 {
     // récupération du ROS Publisher associé au log
     ros::Publisher ros_pub;
@@ -55,7 +56,7 @@ ros::Publisher WrapperSBG2ROS::get_rospub(const SbgEComLog& enum_log, ros::NodeH
 }
 
 template<typename TRosMsg>
-std::string WrapperSBG2ROS::build_topic_name(
+std::string SBGLogParser::build_topic_name(
         const std::string& _prefix_pattern,
         const std::string& _suffix_pattern,
         const std::string& _suffix_for_rostopic_name)

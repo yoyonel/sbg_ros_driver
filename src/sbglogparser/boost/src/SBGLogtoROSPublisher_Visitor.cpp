@@ -1,5 +1,5 @@
-#include "SBGLogtoROSPublisher_Visitor.h"
-#include "SBGLogtoROSPublisher.h"
+#include "sbglogparser/boost/SBGLogtoROSPublisher_Visitor.h"
+#include "sbglogparser/boost/SBGLogtoROSPublisher.h"
 #include "ros/ros.h"
 
 #define _IMP_OPERATOR_VISITOR(ros_msg_type)                                     bool visitor_sbglog_to_ros::operator()(const ros_msg_type& ros_msg) {       return _operator<ros_msg_type>(ros_msg);                                    }

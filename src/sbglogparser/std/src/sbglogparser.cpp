@@ -1,6 +1,8 @@
-#include "wrapper.h"
+#include "sbglogparser/std/sbglogparser.h"
 
-void WrapperSBG2ROS::publish(SbgEComMsgId msg,
+using namespace sbglogparser_std;
+
+void SBGLogParser::publish(SbgEComMsgId msg,
                              const SbgBinaryLogData *pLogData) {
     if (map_msg_to_publish.count(msg)) {
         map_msg_to_publish.at(msg)(pLogData);
@@ -10,7 +12,7 @@ void WrapperSBG2ROS::publish(SbgEComMsgId msg,
     }
 }
 
-SbgErrorCode WrapperSBG2ROS::onLogReceived(SbgEComHandle *pHandle,
+SbgErrorCode SBGLogParser::onLogReceived(SbgEComHandle *pHandle,
                                            SbgEComClass msgClass,
                                            SbgEComMsgId msg,
                                            const SbgBinaryLogData *pLogData) {

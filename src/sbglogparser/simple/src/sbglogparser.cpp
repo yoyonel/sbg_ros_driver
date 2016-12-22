@@ -1,6 +1,13 @@
-﻿#include "sbglogparser.h"
+﻿#include "sbglogparser/simple/sbglogparser.h"
 
-void SBGLogParser::init(const std::string &_topic_for_imu,
+using namespace sbglogparser_simple;
+
+void SBGLogParser::init()
+{
+    this->init_for_ros_topics();
+}
+
+void SBGLogParser::init_for_ros_topics(const std::string &_topic_for_imu,
                         const std::string &_topic_for_fix,
                         const std::string &_frame_id)
 {

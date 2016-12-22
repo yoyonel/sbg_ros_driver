@@ -1,4 +1,4 @@
-#include "SBGLogtoROSMsg.h"
+#include "sbglogparser.h"
 //
 #include <boost/exception/all.hpp>
 

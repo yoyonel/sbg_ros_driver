@@ -1,4 +1,4 @@
-#include "SBGLogtoROSPublisher.h"
+#include "sbglogparser/boost/SBGLogtoROSPublisher.h"
 
 //#include "SBGLogtoROSMsg.h"
 //#include "sbglogparser2_visitor.h"
