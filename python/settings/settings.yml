@@ -1,0 +1,34 @@
+# settings for generated CPP sources files
+
+clang:
+  locations:
+    libclang: /usr/lib/llvm-3.8/lib/libclang.so.1
+    includes:
+      - ../sbgECom/src
+      - ../sbgECom/src/binaryLogs
+      - ../sbgECom/common
+    sources:
+      sbgEComBinaryLogs: ../sbgECom/src/binaryLogs/sbgEComBinaryLogs.h
+      sbgEComIds: ../sbgECom/src/sbgEComIds.h
+  options:
+    - -Xclang
+    - -std=c
+    - -ast-dump
+    - -fsyntax-only
+    - -D__CODE_GENERATOR__
+
+mako:
+  import_directory: mako
+  export_directory: gen/mako
+  templates:
+    CMakeListst.txt:
+        - !!python/tuple [CMakeLists.txt.txt, CMakeLists.txt]
+    SBGLogParser:
+      STD:
+        - !!python/tuple [wrapper_specialization.h.txt, wrapper_specialization.h]
+        - !!python/tuple [wrapper.h.txt, wrapper.h]
+      BOOST:
+        - !!python/tuple [SBGLogtoROSMsg.h.txt, SBGLogtoROSMsg.h]
+        - !!python/tuple [SBGLogtoROSMsg.h.txt, SBGLogtoROSMsg.cpp]
+        - !!python/tuple [SBGLogtoROSPublisher_Visitor.h.txt, SBGLogtoROSPublisher_Visitor.h]
+        - !!python/tuple [SBGLogtoROSPublisher_Visitor.cpp.txt, SBGLogtoROSPublisher_Visitor.cpp]
