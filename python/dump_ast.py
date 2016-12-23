@@ -8,7 +8,8 @@ import os
 from functools import partial
 from collections import namedtuple
 from mako.template import Template  # url: http://docs.makotemplates.org/en/latest/usage.html
-from copy import deepcopy
+import yaml
+from collections import Iterable
 
 NTTypedef = namedtuple('typedef', ['name', 'fields', 'header'])
 NTSBGLog = namedtuple('sbglog', ['var', 'type', 'enum'])
@@ -266,11 +267,12 @@ def iter_nodes(nodes, funcs_filter):
             yield n
 
 
-def extract_typedefs_from_headers(headers):
+def extract_typedefs_from_headers(headers, index, list_options_for_clang):
     """
 
     :param headers:
-    :type headers: list
+    :param index:
+    :param list_options_for_clang:
     :return:
     """
     map_types = {
@@ -377,17 +379,38 @@ def generate_cpp_file(input_filename,
     :param data_for_mako:
     :return:
     """
+    print("Template(filename=%s, ...)" % input_filename)
     template = Template(filename=input_filename, input_encoding=input_encoding)
     gen_source_file = template.render(**data_for_mako)
     with open(output_filename, 'w') as fo:
         fo.write(gen_source_file.encode(output_encoding))
+    print("output_filename: %s" % output_filename)
 
 
-def generate_cpp_files(sbglogs, **kwargs):
+def walk_preorder(yaml_node, prepath=""):
+    """
+
+    :param yaml_node:
+    :param prepath:
+    :return:
+    """
+    # print("prepath: {}".format(prepath))
+    if type(yaml_node) is dict:
+        prepath += "/"
+        # print("cfg: {}".format(cfg))
+        for key, value in yaml_node.iteritems():
+            # print("key: {}".format(key))
+            for descendant in walk_preorder(value, prepath + key):
+                yield descendant
+    else:
+        yield (prepath, yaml_node)
+
+
+def generate_cpp_files(sbglogs, yaml_cfg):
     """
 
     :param sbglogs:
-    :param kwargs:
+    :param yaml_cfg:
     :return:
     """
     datas_for_mako = {
@@ -395,16 +418,17 @@ def generate_cpp_files(sbglogs, **kwargs):
         'sbglogs_types': set(sbglog.type for sbglog in sbglogs)
     }
 
+    cfg_mako = yaml_cfg['mako']
+    import_directory = cfg_mako['import_directory']
+    export_directory = cfg_mako['export_directory']
     templates_filenames = (
-        ('mako/SBGLogtoROSMsg.h.txt', 'gen/mako/SBGLogtoROSMsg.h'),
-        ('mako/SBGLogtoROSMsg.h.txt', 'gen/mako/SBGLogtoROSMsg.cpp'),
-        ('mako/CMakeLists.txt.txt', 'gen/mako/CMakeLists.txt'),
-        ('mako/SBGLogtoROSPublisher_Visitor.h.txt', 'gen/mako/SBGLogtoROSPublisher_Visitor.h'),
-        ('mako/SBGLogtoROSPublisher_Visitor.cpp.txt', 'gen/mako/SBGLogtoROSPublisher_Visitor.cpp'),
-        ('mako/wrapper_specialization.h.txt', 'gen/mako/wrapper_specialization.h'),
-        ('mako/wrapper.h.txt', 'gen/mako/wrapper.h')
+        (os.path.join(import_directory, template_import), os.path.join(export_directory, generated_export), prepath)
+        for prepath, templates in walk_preorder(cfg['mako']['templates'])
+        for template_import, generated_export in templates
     )
-    for import_filename, export_filename in templates_filenames:
+
+    for import_filename, export_filename, prepath in templates_filenames:
+        print("* %s" % prepath)
         generate_cpp_file(import_filename, export_filename, **datas_for_mako)
 
 
@@ -419,25 +443,32 @@ def expand_sbglogs(sbglogs):
             for sbglog_enum in sbglog.enum)
 
 
-if __name__ == "__main__":
-    # clang.cindex.Config.set_library_file('/usr/local/lib/libclang.so')
-    clang.cindex.Config.set_library_file('/usr/lib/llvm-3.8/lib/libclang.so.1')
+def process(yaml_cfg):
+    """
+
+    :param yaml_cfg: YAML configuration
+    """
+    ############################################################
+    cfg_clang = yaml_cfg['clang']
+    cfg_clang_locations = cfg_clang['locations']
+    # set the path to libclang library
+    clang.cindex.Config.set_library_file(cfg_clang_locations['libclang'])
     index = clang.cindex.Index.create()
-    list_options_for_clang = [
-        '-Xclang', '-std=c', '-ast-dump', '-fsyntax-only',
-        '-D__CODE_GENERATOR__',
-        '-I{}'.format(os.path.abspath('../sbgECom/src')),
-        '-I{}'.format(os.path.abspath('../sbgECom/src/binaryLogs')),
-        '-I{}'.format(os.path.abspath('../sbgECom/common')),
-    ]
+    # add compiler options
+    list_options_for_clang = cfg_clang['options']
+    # add includes paths
+    list_options_for_clang.extend(
+        ['-I{}'.format(os.path.abspath(include_path))
+         for include_path in cfg_clang_locations['includes']]
+    )
+    ############################################################
 
-    if len(sys.argv) != 2:
-        print("Usage: dump_ast.py [header file name]")
-        sys.exit()
+    ####################################################################################################################
+    # get the path to the first source code to analyze: sbgEComBinaryLogs.h
+    ####################################################################################################################
+    filename = cfg_clang_locations['sources']['sbgEComBinaryLogs']
 
-    filename = sys.argv[1]
-
-    ##########################################################################
+    ############################################################
     with open(filename, 'r') as fo:
         sourcefile = fo.readlines()
 
@@ -446,9 +477,6 @@ if __name__ == "__main__":
     headers = extract_headers(sourcefile)
     for header in headers:
         print(header + ".h")
-    ##########################################################################
-
-    ##########################################################################
     translation_unit = index.parse(
         filename,
         list_options_for_clang
@@ -484,7 +512,7 @@ if __name__ == "__main__":
     # print("")
 
     print("Extract typedefs from {} headers files ...".format(len(headers)))
-    typedefs_from_headers = extract_typedefs_from_headers(headers)
+    typedefs_from_headers = extract_typedefs_from_headers(headers, index, list_options_for_clang)
     print("-> {} typedef declarations found.".format(len(typedefs_from_headers)))
 
     generate_ros_msg_from_typedefs(typedefs_from_headers, path="gen/msg/")
@@ -507,8 +535,11 @@ if __name__ == "__main__":
     # Generate .h .cpp sources files from sbglogs analysis.
     # generate_cpp_files(sbglogs_filtered)
 
-    #
-    filename = '/home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/sbgEComIds.h'
+    ####################################################################################################################
+    # get the path to the second source code to analyze: sbgEComIds.h
+    ####################################################################################################################
+    filename = cfg_clang_locations['sources']['sbgEComIds']
+
     tu = index.parse(
         filename,
         list_options_for_clang
@@ -537,8 +568,27 @@ if __name__ == "__main__":
                     new_sbglog = sbglog._replace(enum=[new_enum])
                     # pour etendre la liste des types logs qu'on gère
                     sbglogs_filtered.append(new_sbglog)
-
     print("\n".join(map(str, sbglogs_filtered)))
+    ####################################################################################################################
 
     # Generate .h .cpp sources files from sbglogs analysis.
-    generate_cpp_files(sbglogs_filtered)
+    generate_cpp_files(sbglogs_filtered, cfg)
+
+
+if __name__ == "__main__":
+    with open("settings/settings.yml", 'r') as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+    # print(cfg)
+
+    cfg_mako = cfg['mako']
+    import_directories = cfg_mako['import_directory']
+    export_directories = cfg_mako['export_directory']
+    templates = cfg_mako['templates']
+
+    # print(templates)
+
+    # for prepath, child in walk_preorder(cfg['mako']['templates']):
+    #     print("{} -> {}".format(prepath[:-1], child))
+
+    process(cfg)
