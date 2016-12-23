@@ -1,6 +1,7 @@
 ﻿cmake_minimum_required(VERSION 2.8.3)
 project(sbg_driver)
 
+cmake_policy(SET CMP0046 OLD)
 cmake_policy(SET CMP0015 NEW)
 
 macro(add_flags SRC_FILES FLAGS)
@@ -170,6 +171,8 @@ include_directories(
 #
         ${PROJECT_SOURCE_DIR}/include
 )
+
+MESSAGE(STATUS "Catkin directories: ${catkin_INCLUDE_DIRS}")
 
 # file(GLOB_RECURSE SRC ${PROJECT_SOURCE_DIR}/sbgECom/src/*.c)
 # file(GLOB_RECURSE COMMON_SRC ${PROJECT_SOURCE_DIR}/sbgECom/common/*.c)

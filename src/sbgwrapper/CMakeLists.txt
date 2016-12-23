@@ -22,6 +22,7 @@ add_std_cxx11_flag("${PROJECT_SOURCE_DIR}/include/sbgexceptions.h")
 
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
+        ${catkin_INCLUDE_DIRS}
 )
 
 add_library(
