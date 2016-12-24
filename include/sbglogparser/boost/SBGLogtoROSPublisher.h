@@ -16,10 +16,10 @@ public:
     // -------------------------------------------------------------------------
     // ROS PUBLISHER MANAGER: ADD and GET
     // -------------------------------------------------------------------------
-    template<typename T>
+    template<typename TRosMsg>
     inline
     ros::Publisher get_pub() const {
-        return map_sbglog_pub.at(typeid(T));
+        return map_sbglog_pub.at(typeid(TRosMsg));
     }
 
     template<typename T>
@@ -29,10 +29,9 @@ public:
     // -------------------------------------------------------------------------
     // ROS PUBLISHER OPERATION: PUBLISH
     // -------------------------------------------------------------------------
-    template<typename TMsg, typename TVisitor>
+    template<typename TRosMsg, typename TVisitor>
     inline
-    void publish(TMsg& _msg, const TVisitor& _visitor) {
-//        boost::apply_visitor(_visitor, _msg);
+    void publish(TRosMsg& _msg, const TVisitor& _visitor) {
         // url: http://stackoverflow.com/questions/29618636/boost-variant-visitor-with-an-extra-parameter
         auto bound_visitor = std::bind(_visitor, std::placeholders::_1, this);
         boost::apply_visitor(bound_visitor, _msg);

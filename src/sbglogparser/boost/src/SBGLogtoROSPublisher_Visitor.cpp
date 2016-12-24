@@ -22,22 +22,25 @@ _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogUtcData)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogMag)
 _IMP_OPERATOR_VISITOR(sbg_driver::SbgLogDebug0Data)
 
-template <typename T>
-bool visitor_sbglog_to_ros::_operator(const T& ros_msg_with_SBGData, SBGLogtoROSPublisher* _sbglog_publisher) const
+template <typename TROSMsg>
+bool visitor_sbglog_to_ros::_operator(
+        const TROSMsg& ros_msg_with_SBGData,
+        SBGLogtoROSPublisher* _sbglog_publisher) const
 {
     try {
         // on récupère le ROS publisher associé au type du message
-        const ros::Publisher& pub = _sbglog_publisher->get_pub<T>();
+        const ros::Publisher& pub = _sbglog_publisher->get_pub<TROSMsg>();
         // et on publie le message
         pub.publish(ros_msg_with_SBGData);
         return true;
     }
     catch(std::out_of_range) {
-//        // Si le publisher ROS n'existe pas encore
-//        // On le créé et on le rajoute à la liste des ROS publisher dispo.
-//        const ros::Publisher& pub = sbglog_parser->add_pub<T>();
-//        // et on publie le message
-//        pub.publish(ros_msg_with_SBGData);
+        // Si le publisher ROS n'existe pas encore
+        // On le créé et on le rajoute à la liste des ROS publisher dispo.
+        const ros::Publisher& pub = _sbglog_publisher->add_pub<TROSMsg>();
+        // et on publie le message
+        pub.publish(ros_msg_with_SBGData);
+        // flag to false to indicate a creation of new publisher/topic
         return false;
     }
 }
