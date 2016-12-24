@@ -19,7 +19,8 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 ########################################################################################################################
 # SUBDIRECTORIES => MODULES
 ########################################################################################################################
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/boost)
+# ne compile pas sous cygwin ...
+# add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/boost)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/std)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/simple)
 ########################################################################################################################
@@ -32,18 +33,17 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/simple)
 # fake source to build the library (no source, just adding modules)
 file(WRITE ${CMAKE_CURRENT_LIST_DIR}/.null.cpp "")
 
-add_library(
-        sbglog_parsers
+add_library(sbglog_parsers
+        STATIC
         ${CMAKE_CURRENT_LIST_DIR}/.null.cpp
 )
 
 #####################################################################
 # DEPENDANCIES
 #####################################################################
-target_link_libraries(
-        sbglog_parsers
-        sbglog_parsers_boost
-        sbglog_parsers_std
+target_link_libraries(sbglog_parsers
+        # sbglog_parsers_boost
+        # sbglog_parsers_std
         sbglog_parsers_simple
 )
 #####################################################################

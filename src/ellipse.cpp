@@ -1,6 +1,7 @@
 ﻿#include <sbglogparser/std/sbglogparser.h>  // To access to sbglogparser_std namespace
 #include <sbglogparser/boost/sbglogparser.h>    // To acces to sbglogparser_boost namespace
 //
+#include "sbgExceptions.h"
 #include "sbgwrapper/sbgwrapper.h"
 //
 
@@ -114,8 +115,8 @@ int main(int argc, char **argv) {
             ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
         }
 
-//        test_sbglogparser(sbgLogParser_boost);
-        test_sbglogparser(sbgLogParser_std);
+        test_sbglogparser(sbgLogParser_boost);
+        // test_sbglogparser(sbgLogParser_std);
 
         ros::spinOnce();
         loop_rate.sleep();

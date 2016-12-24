@@ -2,7 +2,8 @@
 
 clang:
   locations:
-    libclang: /usr/lib/llvm-3.8/lib/libclang.so.1
+    #libclang: /usr/lib/llvm-3.8/lib/libclang.so.1
+    libclang: /usr/bin/cygclang-3.8.dll
     includes:
       - ../sbgECom/src
       - ../sbgECom/src/binaryLogs

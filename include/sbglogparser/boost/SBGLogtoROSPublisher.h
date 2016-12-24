@@ -32,7 +32,14 @@ public:
     template<typename TMsg, typename TVisitor>
     inline
     void publish(TMsg& _msg, const TVisitor& _visitor) {
-        boost::apply_visitor(_visitor, _msg);
+        // error: TMsg n'est pas encore un ROS msg mais un boost::variant (qui peut designer des ROS messages (après specialization))
+        /*if(!boost::apply_visitor(_visitor, _msg)) {
+            add_pub<TMsg>();
+            boost::apply_visitor(_visitor, _msg);
+        }*/
+        // url: http://stackoverflow.com/questions/29618636/boost-variant-visitor-with-an-extra-parameter
+        auto bound_visitor = std::bind(_visitor, std::placeholders::_1, this);
+        boost::apply_visitor(bound_visitor, _msg);
     }
 
     template<typename TMsg>

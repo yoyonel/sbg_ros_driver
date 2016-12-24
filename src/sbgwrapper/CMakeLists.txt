@@ -25,8 +25,7 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
 )
 
-add_library(
-        sbg_wrapper
+add_library(sbg_wrapper STATIC
         ${PROJECT_SOURCE_DIR}/src/sbgwrapper/src/sbgwrapper.cpp
         ${PROJECT_SOURCE_DIR}/include/sbgwrapper/sbgwrapper.h
         ${PROJECT_SOURCE_DIR}/include/sbgexceptions.h

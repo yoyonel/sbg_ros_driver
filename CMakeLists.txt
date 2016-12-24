@@ -192,31 +192,57 @@ MESSAGE(STATUS "Catkin directories: ${catkin_INCLUDE_DIRS}")
 
 ## Declare a C++ executable
 add_std_cxx11_flag("src/ellipse.cpp")
+add_std_cxx11_flag("src/sbgwrapper/src/sbgwrapper.cpp")
+add_std_cxx11_flag("src/sbglogparser/simple/src/sbglogparser.cpp")
+add_std_cxx11_flag("src/sbglogparser/std/src/sbglogparser.cpp")
+add_std_cxx11_flag("src/sbglogparser/boost/src/sbglogparser.cpp")
+add_std_cxx11_flag("src/sbglogparser/boost/src/SBGLogToROSPublisher.cpp")
+add_std_cxx11_flag("src/sbglogparser/boost/src/SBGLogToROSPublisher_Visitor.cpp")
+#
+add_std_cxx11_flag("src/sbglogparser/boost/src/test_variant.cpp")
 
-add_executable(
-        ellipse
+add_executable(ellipse
         src/ellipse.cpp
+        #
+        src/sbglogparser/boost/src/sbglogparser.cpp
+        src/sbglogparser/boost/src/SBGLogToROSPublisher.cpp
+        src/sbglogparser/boost/src/SBGLogToROSPublisher_Visitor.cpp
+        #
+        src/sbglogparser/simple/src/sbglogparser.cpp
+        #
+        src/sbglogparser/std/src/sbglogparser.cpp
+        #
+        src/sbgwrapper/src/sbgwrapper.cpp
+        #
         ${SRC}
         ${COMMON_SRC}
 )
 
-#target_compile_options(ellipse PRIVATE -fpermissive)
+# add_executable(test_boost_variant
+#     src/sbglogparser/boost/src/test_variant.cpp
+# )
+# target_link_libraries(test_boost_variant
+#     ${catkin_LIBRARIES}
+#     )
+
+target_compile_options(ellipse PRIVATE -fpermissive)
+# target_compile_options(test_boost_variant PRIVATE -fpermissive)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(sbg_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # add_dependencies(ellipse sbgECom)
 
-include(src/sbglogparser/CMakeLists.txt)
-include(src/sbgwrapper/CMakeLists.txt)
+# include(src/sbglogparser/CMakeLists.txt)
+# include(src/sbgwrapper/CMakeLists.txt)
 
 ## Specify libraries to link a library or executable target against
 add_subdirectory(sbgECom)
 
 target_link_libraries(ellipse
         ${catkin_LIBRARIES}
-        sbglog_parsers
-        sbg_wrapper
+        # sbglog_parsers
+        # sbg_wrapper
         sbgECom
 )
 
