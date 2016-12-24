@@ -8,5 +8,6 @@ SBGLogtoROSPublisher::SBGLogtoROSPublisher(ros::NodeHandle _n,
     n(_n),
     private_nh(_private_nh)
 {
-    pVisitor.reset(new visitor_sbglog_to_ros(this));
+//    pVisitor.reset(new visitor_sbglog_to_ros(this));
+    pVisitor.reset(new visitor_sbglog_to_ros());
 }
