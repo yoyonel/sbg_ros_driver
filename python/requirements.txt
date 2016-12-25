@@ -2,6 +2,14 @@ asciitree==0.2
 clang
 mako
 pyyaml
+#
+colorama
+colorlog
+#
+ipython
+#
+rospkg
+
 
 # for powerline
 git+git://github.com/powerline/powerline

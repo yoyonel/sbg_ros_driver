@@ -2,14 +2,15 @@
 # vim: set fileencoding=utf-8
 import clang.cindex
 import asciitree  # must be version 0.2
-import sys
 import re
 import os
 from functools import partial
 from collections import namedtuple
 from mako.template import Template  # url: http://docs.makotemplates.org/en/latest/usage.html
 import yaml
-from collections import Iterable
+#
+import logging
+from colorlog import ColoredFormatter
 
 NTTypedef = namedtuple('typedef', ['name', 'fields', 'header'])
 NTSBGLog = namedtuple('sbglog', ['var', 'type', 'enum'])
@@ -575,8 +576,51 @@ def process(yaml_cfg):
     generate_cpp_files(sbglogs_filtered, cfg)
 
 
+def setup_logger():
+    """Return a logger with a default ColoredFormatter."""
+    # %(white)s%(asctime)s%(reset)s
+    formatter = ColoredFormatter(
+        "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
+        datefmt=None,
+        reset=True,
+        log_colors={
+            'DEBUG':    'cyan',
+            'INFO':     'green',
+            'WARNING':  'yellow',
+            'ERROR':    'red',
+            'CRITICAL': 'red',
+        }
+    )
+
+    logger = logging.getLogger('example')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+
+    return logger
+
+
+def test_logger(logger):
+    """
+
+    :param logger:
+    """
+    logger.debug('a debug message')
+    logger.info('an info message')
+    logger.warning('a warning message')
+    logger.error('an error message')
+    logger.critical('a critical message')
+
+
 if __name__ == "__main__":
-    with open("settings/settings.yml", 'r') as ymlfile:
+    """Create and use a logger."""
+    logger = setup_logger()
+    # test_logger(logger)
+
+    yaml_setting_filename = "settings/settings.yml"
+    with open(yaml_setting_filename, 'r') as ymlfile:
+        logger.info("Load YAML settings file: '%s'" % yaml_setting_filename)
         cfg = yaml.load(ymlfile)
 
     # print(cfg)
@@ -591,4 +635,4 @@ if __name__ == "__main__":
     # for prepath, child in walk_preorder(cfg['mako']['templates']):
     #     print("{} -> {}".format(prepath[:-1], child))
 
-    process(cfg)
+    # process(cfg)
