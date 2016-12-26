@@ -1,8 +1,12 @@
 project(sbglog_parsers_boost)
 
 # url: https://cmake.org/Wiki/CMake_Useful_Variables
-file(GLOB_RECURSE SRC ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
-#MESSAGE(STATUS SRC: ${SRC})
+file(GLOB_RECURSE SRC 
+	${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
+	${PROJECT_SOURCE_DIR}/../../../include/sbglogparser/boost/*.h
+	${PROJECT_SOURCE_DIR}/../../../include/sbglogparser/boost/*.inl
+)
+MESSAGE(STATUS SRC: ${SRC})
 #MESSAGE(STATUS  CMAKE_CURRENT_LIST_DIR : ${CMAKE_CURRENT_LIST_DIR})
 
 add_std_cxx11_flag("${SRC}")
@@ -12,6 +16,7 @@ add_std_cxx11_flag("${SRC}")
 
 add_library(
         sbglog_parsers_boost
+        STATIC
         ${SRC}
 )
 

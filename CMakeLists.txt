@@ -147,13 +147,13 @@ generate_dynamic_reconfigure_options(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-# INCLUDE_DIRS sbgECom
-# LIBRARIES ${PROJECT_NAME}
-#  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
-# DEPENDS sbgECom
-        INCLUDE_DIRS
-        LIBRARIES
-        CATKIN_DEPENDS message_runtime std_msgs
+    # INCLUDE_DIRS sbgECom
+    # LIBRARIES ${PROJECT_NAME}
+    #  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
+    # DEPENDS sbgECom
+    INCLUDE_DIRS
+    LIBRARIES
+    CATKIN_DEPENDS message_runtime std_msgs
 )
 
 ###########
@@ -234,8 +234,9 @@ target_link_libraries(ellipse
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
+# url: http://docs.ros.org/jade/api/catkin/html/howto/format2/building_libraries.html
 ## Mark executables and/or libraries for installation
-install(TARGETS ellipse
+install(TARGETS ellipse sbglog_parsers sbg_wrapper
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

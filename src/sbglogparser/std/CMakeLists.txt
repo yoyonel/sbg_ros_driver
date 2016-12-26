@@ -6,5 +6,6 @@ add_std_cxx11_flag("${SRC}")
 
 add_library(
         sbglog_parsers_std
+        STATIC
         ${SRC}
 )

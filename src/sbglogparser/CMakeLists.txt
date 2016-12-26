@@ -34,6 +34,7 @@ file(WRITE ${CMAKE_CURRENT_LIST_DIR}/.null.cpp "")
 
 add_library(
         sbglog_parsers
+        STATIC
         ${CMAKE_CURRENT_LIST_DIR}/.null.cpp
 )
 
@@ -41,10 +42,10 @@ add_library(
 # DEPENDANCIES
 #####################################################################
 target_link_libraries(
-        sbglog_parsers
-        sbglog_parsers_boost
-        sbglog_parsers_std
-        sbglog_parsers_simple
+    sbglog_parsers
+    sbglog_parsers_boost
+    sbglog_parsers_std
+    sbglog_parsers_simple
 )
 #####################################################################
 
