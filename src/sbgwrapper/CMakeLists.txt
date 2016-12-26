@@ -27,6 +27,7 @@ include_directories(
 
 add_library(
         sbg_wrapper
+        STATIC
         ${PROJECT_SOURCE_DIR}/src/sbgwrapper/src/sbgwrapper.cpp
         ${PROJECT_SOURCE_DIR}/include/sbgwrapper/sbgwrapper.h
         ${PROJECT_SOURCE_DIR}/include/sbgexceptions.h

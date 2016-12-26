@@ -64,11 +64,11 @@ protected:
         return get_rospub<TRosMsg>(enum_log, n);
     }
 
-    template<typename TRosMsg>
-    std::string build_topic_name(
-            const std::string& _prefix_pattern="SbgLog",
-            const std::string& _suffix_pattern="Data",
-            const std::string& _suffix_for_rostopic_name="");
+//    template<typename TRosMsg>
+//    std::string build_topic_name(
+//            const std::string& _prefix_pattern="SbgLog",
+//            const std::string& _suffix_pattern="Data",
+//            const std::string& _suffix_for_rostopic_name="");
 
 private:
     std::map<SbgEComLog, ros::PublisherPtr> map_enum_rospub;
