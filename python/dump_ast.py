@@ -323,15 +323,18 @@ def extract_typedefs_from_headers(headers, index, list_options_for_clang):
     return typedefs
 
 
-def generate_rosmsg_attributes_from_typedef(typedef):
+def generate_rosmsg_attributes_from_typedef(typedef, add_ros_header=False):
     """
 
     :param typedef:
+    :param add_ros_header:
     :return:
     """
     # header
     yield "# Generated from: {}".format(typedef.header)
     yield "# {}".format(typedef.name)
+    if add_ros_header:
+        yield "Header header    # reference timestamp for ROS"
     # list attributes
     for type_field, name_field in typedef.fields:
         str_attribute = "{} {}".format(type_field, name_field)
@@ -635,4 +638,4 @@ if __name__ == "__main__":
     # for prepath, child in walk_preorder(cfg['mako']['templates']):
     #     print("{} -> {}".format(prepath[:-1], child))
 
-    # process(cfg)
+    process(cfg)
