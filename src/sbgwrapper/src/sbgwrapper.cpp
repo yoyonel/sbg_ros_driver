@@ -17,44 +17,38 @@
 //    log_parser->init();
 //}
 
-SbgErrorCode SBGWrapper::createSerialInterface()
-{
+SbgErrorCode SBGWrapper::createSerialInterface() {
     return sbgInterfaceSerialCreate(&sbgInterface,
                                     uart_port.c_str(),
                                     uart_baud_rate);
 }
 
-SbgErrorCode SBGWrapper::initECom()
-{
+SbgErrorCode SBGWrapper::initECom() {
     SbgErrorCode errCode = SBG_ERROR;
     if (serialinterface_is_init)
         errCode = sbgEComInit(&comHandle, &sbgInterface);
     return errCode;
 }
 
-SbgErrorCode SBGWrapper::getDeviceInfo()
-{
+SbgErrorCode SBGWrapper::getDeviceInfo() {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
         errCode = sbgEComCmdGetInfo(&comHandle, &deviceInfo);
     return errCode;
 }
 
-SbgErrorCode SBGWrapper::save_and_reboot()
-{
+SbgErrorCode SBGWrapper::save_and_reboot() {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
         errCode = sbgEComCmdSettingsAction(&comHandle, SBG_ECOM_SAVE_SETTINGS);
     return errCode;
 }
 
-void SBGWrapper::save_settings()
-{
+void SBGWrapper::save_settings() {
     THROW_EXCEPTION(save_and_reboot, sbgEComCmdSettingsActionException);
 }
 
-SbgErrorCode SBGWrapper::set_configuration_for_cmd_output(const SBGConfiguration &_config)
-{
+SbgErrorCode SBGWrapper::set_configuration_for_cmd_output(const SBGConfiguration &_config) {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
         errCode = sbgEComCmdOutputSetConf(&comHandle,
@@ -71,16 +65,14 @@ void SBGWrapper::set_configuration(const SBGConfiguration &_config) {
 }
 
 
-SbgErrorCode SBGWrapper::handle_sbgECom()
-{
+SbgErrorCode SBGWrapper::handle_sbgECom() {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init)
         errCode = sbgEComHandle(&comHandle);
     return errCode;
 }
 
-void SBGWrapper::handle_logs()
-{
+void SBGWrapper::handle_logs() {
     //    const SbgErrorCode& errorCode = handle_sbgECom();
     // errorCode == 'SBG_NOT_READY' ... => SBG_NOT_READY if we haven't received a valid frame or if the serial buffer is empty.<br>
     //    if(errorCode != 10)
@@ -92,8 +84,7 @@ void SBGWrapper::handle_logs()
         log_parser->publish();
 }
 
-SbgErrorCode SBGWrapper::set_callback_for_logs()
-{
+SbgErrorCode SBGWrapper::set_callback_for_logs() {
     SbgErrorCode errCode = SBG_ERROR;
     if (ecom_is_init) {
         _set_callback_for_logs(comHandle, log_parser.get());

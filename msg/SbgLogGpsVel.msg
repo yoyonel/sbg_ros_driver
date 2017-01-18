@@ -1,4 +1,4 @@
-# Generated from: /home/atty/Prog/__IGN__/2015_LI3DS/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.h
+# Generated from: /home/latty/link_dir/2015_li3ds/__ROS__/Ellipse_N/ROS/overlay_ws/src/sbg_ros_driver/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.h
 # SbgLogGpsVel
 uint32 timeStamp
 uint32 status

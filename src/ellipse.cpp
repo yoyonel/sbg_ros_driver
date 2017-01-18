@@ -1,9 +1,8 @@
-﻿#include <sbglogparser/std/sbglogparser.h>  // To access to sbglogparser_std namespace
+﻿#include <sbglogparser/std/sbglogparser.h>      // To access to sbglogparser_std namespace
 #include <sbglogparser/boost/sbglogparser.h>    // To acces to sbglogparser_boost namespace
 //
 #include "sbgwrapper/sbgwrapper.h"
 //
-
 
 template<typename TParser=sbglogparser_std::SBGLogParser>
 void test_sbglogparser(TParser &sbgLogParser) {
@@ -23,7 +22,7 @@ void test_sbglogparser(TParser &sbgLogParser) {
     try {
         memcpy(&genericLogData.ekfQuatData, &quat_data, sizeof(SbgLogEkfQuatData));
         sbgLogParser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_QUAT,
-                              &genericLogData);
+                                   &genericLogData);
     }
     catch (SbgEComMsgIdException &err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
@@ -32,7 +31,7 @@ void test_sbglogparser(TParser &sbgLogParser) {
     try {
         memcpy(&genericLogData.ekfNavData, &nav_data, sizeof(SbgLogEkfNavData));
         sbgLogParser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_EKF_NAV,
-                              &genericLogData);
+                                   &genericLogData);
     }
     catch (SbgEComMsgIdException &err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
@@ -41,7 +40,7 @@ void test_sbglogparser(TParser &sbgLogParser) {
     try {
         memcpy(&genericLogData.shipMotionData, &ship_motion_data, sizeof(SbgLogShipMotionData));
         sbgLogParser.onLogReceived(NULL, SbgEComClass(), SBG_ECOM_LOG_SHIP_MOTION,
-                              &genericLogData);
+                                   &genericLogData);
     }
     catch (SbgEComMsgIdException &err) {
         std::cout << "Erreur dans 'onLogReceived(...)': " << err.what() << std::endl;
@@ -69,9 +68,9 @@ int main(int argc, char **argv) {
     SBGWrapper &sbgwrapper = *ptr_sbgwrapper;
 
     try {
-        sbgwrapper.initialize();    // use default wrapper (very simple/naive)
-//        sbgwrapper.initialize<SBGLogParser>(); // use std wrapper
-        // sbgwrapper.initialize<WrapperSBG2ROS>(); // use std wrapper
+        // sbgwrapper.initialize();    // use default wrapper (very simple/naive)
+        // sbgwrapper.initialize<sbglogparser_boost::SBGLogParser>(); // use std wrapper
+        sbgwrapper.initialize<sbglogparser_std::SBGLogParser>(); // use std wrapper
     } catch (const sbgExceptions &e) {
         ROS_ERROR_STREAM("initialize -> Exception: " << e.what());
     }
@@ -79,7 +78,7 @@ int main(int argc, char **argv) {
     ROS_INFO("CONNEXTION SET-UP");
 
     // ****************************** SBG Config ******************************
-    //
+    // Ne semble pas avoir d'influence sur les messages emis par la centrale ...
     try {
         sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_nav());
         sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_quat());
@@ -103,8 +102,8 @@ int main(int argc, char **argv) {
     }
     ROS_INFO("START RECEIVING DATA");
 
-    sbglogparser_boost::SBGLogParser sbgLogParser_boost(n, private_nh);
-    sbglogparser_std::SBGLogParser sbgLogParser_std(n, private_nh);
+//    sbglogparser_boost::SBGLogParser sbgLogParser_boost(n, private_nh);
+//    sbglogparser_std::SBGLogParser sbgLogParser_std(n, private_nh);
 
     ros::Rate loop_rate(25);
     while (ros::ok()) {
@@ -114,8 +113,8 @@ int main(int argc, char **argv) {
             ROS_ERROR_STREAM("handle logs -> Exception: " << e.what());
         }
 
-        test_sbglogparser(sbgLogParser_boost);
-//        test_sbglogparser(sbgLogParser_std);
+        // test_sbglogparser(sbgLogParser_boost);
+        // test_sbglogparser(sbgLogParser_std);
 
         ros::spinOnce();
         loop_rate.sleep();
