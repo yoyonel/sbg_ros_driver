@@ -26,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
         std_msgs
 #
         message_generation
+        message_filters
         dynamic_reconfigure
 )
 
@@ -153,7 +154,7 @@ catkin_package(
     # DEPENDS sbgECom
     INCLUDE_DIRS
     LIBRARIES
-    CATKIN_DEPENDS message_runtime std_msgs
+    CATKIN_DEPENDS message_runtime message_filters std_msgs
 )
 
 ###########
