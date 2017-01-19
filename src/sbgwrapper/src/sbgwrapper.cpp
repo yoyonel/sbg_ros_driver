@@ -67,8 +67,9 @@ void SBGWrapper::set_configuration(const SBGConfiguration &_config) {
 
 SbgErrorCode SBGWrapper::handle_sbgECom() {
     SbgErrorCode errCode = SBG_ERROR;
-    if (ecom_is_init)
+    if (ecom_is_init) {
         errCode = sbgEComHandle(&comHandle);
+    }
     return errCode;
 }
 
@@ -78,6 +79,8 @@ void SBGWrapper::handle_logs() {
     //    if(errorCode != 10)
     //        ROS_INFO_STREAM(sbgErrorCodeToString(errorCode));
     //        THROW_EXCEPTION(handle_sbgECom, sbgEComHandleException);
+
+    //
     handle_sbgECom();
 
     if (log_parser)

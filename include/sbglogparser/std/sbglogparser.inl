@@ -29,6 +29,10 @@ TRosMsg SBGLogParser::build_rosmsg(const SbgBinaryLogData *pLogData)
     std::memcpy(&ros_msg,
                 &(pLogDataCasted),
                 sizeof(TSbgLog));
+    // std::memcpy(&ros_msg + sizeof(std_msgs::Header),
+    //             &(pLogDataCasted),
+    //             sizeof(TSbgLog) - sizeof(std_msgs::Header));
+    // ros_msg.header.stamp = ros::Time::now();
 
     return ros_msg;
 }
@@ -47,7 +51,6 @@ ros::Publisher SBGLogParser::get_rospub(const SbgEComLog& enum_log,
         // le ROS Publisher n'est pas initialisé/utilisé
         // création et initialisation du ROS Publisher
         ros_pub = n.advertise<TRosMsg>(build_topic_name<TRosMsg>(), 10);
-        // ros_pub = n.advertise<TRosMsg>("toto", 10);
 
         // sauvegarde dans la map de la correspondance: enum log -> ros publisher
         map_enum_rospub[enum_log] = std::make_shared<ros::Publisher>(ros_pub);

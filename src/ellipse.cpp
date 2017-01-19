@@ -4,6 +4,19 @@
 #include "sbgwrapper/sbgwrapper.h"
 //
 
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+
+using namespace message_filters;
+
+void callback(
+    const sbg_driver::SbgLogEkfNavData::ConstPtr&     EkfNav,
+    const sbg_driver::SbgLogShipMotionData::ConstPtr& ShipMotion)
+{
+  // Solve all of perception here...
+  std::cerr << "callback !" << std::endl;
+}
+
 template<typename TParser=sbglogparser_std::SBGLogParser>
 void test_sbglogparser(TParser &sbgLogParser) {
     //
@@ -56,7 +69,7 @@ int main(int argc, char **argv) {
 
     std::string uart_port;
     int uart_baud_rate;
-    private_nh.param<std::string>("uart_port", uart_port, "/dev/ttyUSB1");
+    private_nh.param<std::string>("uart_port", uart_port, "/dev/ttyUSB0");
     private_nh.param<int>("uart_baud_rate", uart_baud_rate, 115200);
     //
     ROS_INFO_STREAM("uart_port: " << uart_port);
@@ -104,6 +117,23 @@ int main(int argc, char **argv) {
 
 //    sbglogparser_boost::SBGLogParser sbgLogParser_boost(n, private_nh);
 //    sbglogparser_std::SBGLogParser sbgLogParser_std(n, private_nh);
+
+    // TEST: messages filters + synch
+    // urls:
+    // - http://wiki.ros.org/message_filters
+    // - http://answers.ros.org/question/60568/synchronizing-messages-without-time-headers/
+    // - http://answers.ros.org/question/197811/time-synchronizer-message_filters-with-custom-message-type/
+    // - http://wiki.ros.org/message_filters/ApproximateTime
+    // - http://wiki.ros.org/message_filters#ApproximateTime_Policy
+    // - http://answers.ros.org/question/9705/synchronizer-and-image_transportsubscriber/
+    // - http://answers.ros.org/question/107531/linking-errors-with-message_filters-in-hydro/
+    // - http://answers.ros.org/question/121831/boostbind-errors-in-subscriber-callback-functions/
+    //
+    //message_filters::Subscriber<sbg_driver::SbgLogEkfNavData> EkfNav_sub(n, "EkfNav", 1);
+    //message_filters::Subscriber<sbg_driver::SbgLogShipMotionData> ShipMotion_sub(n, "ShipMotion", 1);
+    //
+    //TimeSynchronizer<sbg_driver::SbgLogEkfNavData, sbg_driver::SbgLogShipMotionData> sync(EkfNav_sub, ShipMotion_sub, 10);
+    //sync.registerCallback(boost::bind(&callback, _1, _2));
 
     ros::Rate loop_rate(25);
     while (ros::ok()) {
