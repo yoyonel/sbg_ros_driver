@@ -107,11 +107,11 @@ def filter_source_filename(n, location_filename=""):
     :return:
     :rtype: bool
     """
-    # try:
-    #     return n.location.file.name == location_filename if location_filename else True
-    # except:
-    #     return False
-    return n.location.file.name == location_filename if location_filename else True
+    try:
+        return n.location.file.name == location_filename if location_filename else True
+    except:
+        return False
+    # return n.location.file.name == location_filename if location_filename else True
 
 
 def node_to_string(node):
