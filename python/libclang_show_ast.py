@@ -21,6 +21,7 @@ class Level(int):
     '''represent currently visited level of a tree'''
 
     def show(self, *args):
+        dlmfkdlfk
         '''pretty print an indented line'''
         print '\t' * self + ' '.join(map(str, args))
 
