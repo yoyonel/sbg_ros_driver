@@ -99,6 +99,7 @@ def generate_cpp_file(input_filename,
 
 def generate_cpp_files(sbglogs, yaml_cfg):
     """
+    Génération des fichiers C++ à partir d'une analyse AST de la lib C de l'API SBG.
 
     :param sbglogs: list de tuples NTSBGLog
     :type sbglogs: list
@@ -107,8 +108,8 @@ def generate_cpp_files(sbglogs, yaml_cfg):
     """
     # Construction du dictionnaire de données transmis/utilisé par les fichiers templates mako
     # Ce dictionnaire utilise la liste des sbglogs extraits (par analyse) des headers .h
-    # Des sbblogs on récupère le sbglog et un set/ensemble des types qu'il contient (et non pas la liste qui peut
-    # posséder des doublons)
+    # Des sbglogs, on récupère le sbglog et un set/ensemble des types qu'il contient (et non pas la liste (des types)
+    # qui peut posséder des doublons)
     datas_for_mako = {
         'sbglogs': sbglogs,
         'sbglogs_types': set(sbglog.type for sbglog in sbglogs)
@@ -116,9 +117,11 @@ def generate_cpp_files(sbglogs, yaml_cfg):
 
     # on récupère la partie 'mako' de configuration dans le fichier yaml de settings
     cfg_mako = yaml_cfg['mako']
+
     # on récupère les chemins d'accès aux répertoires d'import/export
     import_directory = cfg_mako['import_directory']
     export_directory = cfg_mako['export_directory']
+
     # on construit une liste de fichiers template et l'export associés
     templates_filenames = (
         (os.path.join(import_directory, template_import), os.path.join(export_directory, generated_export), prepath)
@@ -126,6 +129,7 @@ def generate_cpp_files(sbglogs, yaml_cfg):
         for template_import, generated_export in templates
     )
 
+    # Pour chaque tuple de template (import, export filenames avec prepath (debug utility)).
     for import_filename, export_filename, prepath in templates_filenames:
         print("* %s" % prepath)
         generate_cpp_file(import_filename, export_filename, **datas_for_mako)
@@ -135,6 +139,7 @@ def process(yaml_cfg):
     """
 
     :param yaml_cfg: YAML configuration
+    :type yaml_cfg: dict
     """
     ############################################################
     cfg_clang = yaml_cfg['clang']
@@ -173,9 +178,9 @@ def process(yaml_cfg):
 
     bound_check_filename = partial(filter_source_filename, location_filename=filename)
     bound_node_children = partial(node_children, filter=bound_check_filename)
-    print(asciitree.draw_tree(translation_unit.cursor,
-                              bound_node_children,
-                              node_to_string))
+    # print(asciitree.draw_tree(translation_unit.cursor,
+    #                           bound_node_children,
+    #                           node_to_string))
     # print(translation_unit.spelling)
 
     ###########################################
@@ -211,6 +216,7 @@ def process(yaml_cfg):
     #     for type_field, name_field in fields:
     #         print("\t{} {}".format(type_field, name_field))
 
+    # [DEBUG]
     # bound_node_children = partial(node_children, filter=bound_check_filename)
     # print(asciitree.draw_tree(tu_header.cursor,
     #                           bound_node_children,
@@ -235,10 +241,12 @@ def process(yaml_cfg):
     )
     #
     bound_check_filename = partial(filter_source_filename, location_filename=filename)
-    bound_node_children = partial(node_children, filter=bound_check_filename)
-    print(asciitree.draw_tree(tu.cursor,
-                              bound_node_children,
-                              node_to_string))
+
+    # [DEBUG]
+    # bound_node_children = partial(node_children, filter=bound_check_filename)
+    # print(asciitree.draw_tree(tu.cursor,
+    #                           bound_node_children,
+    #                           node_to_string))
     #
     list_enums = list(n.spelling
                       for n in iter_nodes(tu.cursor.walk_preorder(),
