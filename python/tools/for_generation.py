@@ -11,7 +11,8 @@ from for_extractions import *
 
 def generate_rosmsg_attributes_from_typedef(typedef):
     """
-    generator
+    [Generator]
+    Generate ROS MSG string representation from typedef AST node
 
     :param typedef:
     :return:
@@ -27,28 +28,44 @@ def generate_rosmsg_attributes_from_typedef(typedef):
         yield str_attribute
 
 
-def generate_rosmsg_from_typedef(typedef, **kwargs):
+def generate_rosmsg_filename(typedef, **kwargs):
     """
+    Construction du nom du fichier ROS MSG à partir du typedef generateur et des parametres de génération
 
     :param typedef:
     :type typedef: NTTypedef
     :param kwargs:
+    :type kwargs: dict
+    :return: nom du fichier ROS MSG
+    :rtype: str
     """
     path_rosmsg = kwargs.get("path", "gen/msg/")
     ext_rosmsg = kwargs.get("ext", ".msg")
     #
-    filename_rosmsg = path_rosmsg + typedef.name + ext_rosmsg
+    return path_rosmsg + typedef.name + ext_rosmsg
 
-    with open(filename_rosmsg, 'w') as fo_ros_msg:
+
+def generate_rosmsg_from_typedef(typedef, **kwargs):
+    """
+    Génération d'un fichier ROS MSG à partir d'un typedef et de paramètres de génération
+
+    :param typedef:
+    :type typedef: NTTypedef
+    :param kwargs:
+    :type kwargs: dict
+    """
+    with open(generate_rosmsg_filename(typedef, **kwargs), 'w') as fo_ros_msg:
         fo_ros_msg.writelines("\n".join(generate_rosmsg_attributes_from_typedef(typedef)))
 
 
 def generate_ros_msg_from_typedefs(typedefs, **kwargs):
     """
+    Création de fichier ROS MSG à partir d'une liste de typedefs
 
     :param typedefs:
+    :type typedefs: list
     :param kwargs:
-    :return:
+    :type kwargs: dict
     """
     for typedef in typedefs:
         generate_rosmsg_from_typedef(typedef, **kwargs)
@@ -62,11 +79,15 @@ def generate_cpp_file(input_filename,
     """
 
     :param input_filename:
+    :type input_filename: str
     :param output_filename:
+    :type output_filename: str
     :param input_encoding:
+    :type input_encoding: str
     :param output_encoding:
+    :type output_encoding: str
     :param data_for_mako:
-    :return:
+    :type data_for_mako: dict
     """
     print("Template(filename=%s, ...)" % input_filename)
     template = Template(filename=input_filename, input_encoding=input_encoding)
@@ -79,21 +100,29 @@ def generate_cpp_file(input_filename,
 def generate_cpp_files(sbglogs, yaml_cfg):
     """
 
-    :param sbglogs:
-    :param yaml_cfg:
-    :return:
+    :param sbglogs: list de tuples NTSBGLog
+    :type sbglogs: list
+    :param yaml_cfg: configuration YAML pour la génération des fichiers .cpp
+    :type yaml_cfg: dict
     """
+    # Construction du dictionnaire de données transmis/utilisé par les fichiers templates mako
+    # Ce dictionnaire utilise la liste des sbglogs extraits (par analyse) des headers .h
+    # Des sbblogs on récupère le sbglog et un set/ensemble des types qu'il contient (et non pas la liste qui peut
+    # posséder des doublons)
     datas_for_mako = {
         'sbglogs': sbglogs,
         'sbglogs_types': set(sbglog.type for sbglog in sbglogs)
     }
 
+    # on récupère la partie 'mako' de configuration dans le fichier yaml de settings
     cfg_mako = yaml_cfg['mako']
+    # on récupère les chemins d'accès aux répertoires d'import/export
     import_directory = cfg_mako['import_directory']
     export_directory = cfg_mako['export_directory']
+    # on construit une liste de fichiers template et l'export associés
     templates_filenames = (
         (os.path.join(import_directory, template_import), os.path.join(export_directory, generated_export), prepath)
-        for prepath, templates in walk_preorder(yaml_cfg['mako']['templates'])
+        for prepath, templates in walk_preorder(cfg_mako['templates'])
         for template_import, generated_export in templates
     )
 
@@ -152,9 +181,10 @@ def process(yaml_cfg):
     ###########################################
     # Association des types des sbglog avec les enums
     ###########################################
+    # on recupère une liste de tuples de types (var name, var type, enum/comment)
     sblog_types = extract_tuples_sbglog_types(translation_unit, bound_check_filename)
 
-    # for sbglog_type, enums, sbglog_var in associate_sbglog_type_with_enums(sblog_types):
+    #
     sbglogs = extract_enums_from_comments(sblog_types)
     for sbglog_var, sbglog_type, enums in sbglogs:
         print("{} ({}) -> {}".format(

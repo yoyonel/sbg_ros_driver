@@ -77,19 +77,25 @@ def node_children(node, filter=lambda n: True):
 
 def apply_filters(n, filters):
     """
+    Retourne le résultat d'une application de liste de filtres sur un node
 
     :param n:
     :param filters:
+    :type filters: list
     :return:
+    :rtype: bool
     """
     return all(f(n) for f in filters)
 
 
 def iter_nodes(nodes, funcs_filter):
     """
+    [Generator]
+    Itération sur les nodes avec une application de filtres
 
     :param nodes:
     :param funcs_filter:
+    :type funcs_filter: list
     :return:
     """
     for n in nodes:

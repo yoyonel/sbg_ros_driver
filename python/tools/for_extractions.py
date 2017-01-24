@@ -33,10 +33,13 @@ def extract_headers(source_lines,
 def extract_headers_from_ast(tu,
                              regexp_for_include=r"(.*)sbgEComBinaryLog(.*).h"):
     """
+    Extrait la liste des headers à partir de l'analyse d'un translation unit
 
     :param tu:
     :param regexp_for_include:
+    :type regexp_for_include: str
     :return:
+    :rtype: tuple
 
     """
     # include.location.file.name
@@ -48,10 +51,13 @@ def extract_headers_from_ast(tu,
 def extract_tuples_sbglog_types(tu,
                                 func_filter=lambda n: True):
     """
+    Extraction des types (AST) utilisés dans les typedefs dans les noeuds présent dans un translate unit.
 
     :param tu:
     :param func_filter:
-    :return:
+    :type func_filter: func
+    :return: retourne une liste de tuples (var name, var type, comment)
+    :rtype: list
     """
     # liste des associations enums/types des logs utilisés par SBG
     l_sblog_types = []
@@ -99,10 +105,14 @@ def extract_tuples_sbglog_types(tu,
 
 def extract_enum_from_comment(comment, prefix_for_enum='SBG_ECOM_LOG_'):
     """
+    Analyse d'un commentaire (de l'API C SBG) pour extraire un type 'SBG_ECOM_LOG_*'
 
-    :param comment:
-    :param prefix_for_enum:
+    :param comment: string d'un commentaire
+    :type comment: str
+    :param prefix_for_enum: pattern de recherche de substring dans le commentaire (default='SBG_ECOM_LOG_')
+    :type prefix_for_enum: str
     :return:
+    :rtype: list
 
     >>> comment = "/*!< Stores data for the SBG_ECOM_LOG_STATUS message. */"
     >>> extract_enum_from_comment(comment)
@@ -123,6 +133,7 @@ def extract_enum_from_comment(comment, prefix_for_enum='SBG_ECOM_LOG_'):
 
 def extract_enums_from_comments(_sblog_types, _prefix_for_enum='SBG_ECOM_LOG_'):
     """
+    Convertie les commentaires contenues dans une liste de tuples types (champs enum) par analyse des commentaires.
 
     :param _sblog_types:
     :type _sblog_types: list
@@ -132,30 +143,51 @@ def extract_enums_from_comments(_sblog_types, _prefix_for_enum='SBG_ECOM_LOG_'):
     :rtype: list
 
     """
-    return [sbglog._replace(enum=extract_enum_from_comment(sbglog.enum, _prefix_for_enum))
-            for sbglog in _sblog_types]
+    # return [sbglog._replace(enum=extract_enum_from_comment(sbglog.enum, _prefix_for_enum))
+    #         for sbglog in _sblog_types]
+    return [NTSBGLog(var=sbglog_var,
+                     type=sbglog_type,
+                     enum=extract_enum_from_comment(comment, _prefix_for_enum))
+            for sbglog_var, sbglog_type, comment in _sblog_types]
 
 
-def extract_typedefs_from_headers(headers, index, list_options_for_clang):
+def extract_typedefs_from_headers(headers, index, options_for_clang):
     """
+    Process (itératif) pour générer le contenu des fichiers .msg pour ROS.
+    On effectue une extraction des informations à partir d'une analyse (ast) des headers (.h).
+    Dans ces headers, on récupère la liste des 'typedef'.
+    Des 'typedef' on récupère la liste des champs de déclarations.
+    Des champs de déclarations, on récupère la liste des tableaux constants.
+    A partir des définitions des tableaux constants, on récupère la volumétrie (taille) et les types des données,
+    et on effectue une convertion (si besoin) vers le format .msg de ROS
 
     :param headers:
+    :type headers: list
     :param index:
-    :param list_options_for_clang:
+    :param options_for_clang: options clang de compilation (build) pour interpréter/translate les fichiers (headers)
+    :type options_for_clang: list
     :return:
+    :rtype: list
     """
+
+    # map pour convertir les types C vers les types ROS MSG
+    # - float -> float32
+    # - double -> float64
+    # Tous les autres types C semblent compatibles avec les types ROS MSG (char, int, ...)
     map_types = {
         'float': 'float32',
         'double': 'float64'
     }
 
+    # Liste résultats
     typedefs = []
 
+    # On parcourt les noms de fichiers headers
     for header in headers:
         # print("header: {}".format(header))
 
         # translation unit from header source file parsing
-        tu_header = index.parse(header, list_options_for_clang)
+        tu_header = index.parse(header, options_for_clang)
 
         # iter on typedef declaration
         bound_check_filename = partial(filter_source_filename, location_filename=header)
@@ -165,6 +197,7 @@ def extract_typedefs_from_headers(headers, index, list_options_for_clang):
             # iter on field declaration (inside typedef decl)
             for node_field in iter_nodes(node_typedef.walk_preorder(), [is_field_decl]):
                 # get the type of the field decl
+                # using map: 'map_types' to convert type (C -> ROS MSG, if necesseray).
                 type_field_ast = map_types.get(node_field.type.spelling, node_field.type.spelling)
 
                 # if is a constant array
@@ -181,11 +214,16 @@ def extract_typedefs_from_headers(headers, index, list_options_for_clang):
                 #     type_field_ast,
                 #     node_field.spelling or node_field.displayname)
                 # )
-                #
+
+                # Add in result list fields a tuple: string ROS MSG representation, name of ast field
                 fields.append((type_field_ast, node_field.spelling or node_field.displayname))
 
             if fields:
-                # typedefs.append((node_typedef.spelling or node_typedef.displayname, fields))
+                # If list fields result is not empty
+                # add the list fields to typedefs list result with tuple:
+                # - name of the typedef
+                # - list of fields for the typedef
+                # - header container (name)
                 typedefs.append(NTTypedef(name=node_typedef.spelling, fields=fields, header=header))
 
     return typedefs
