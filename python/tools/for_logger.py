@@ -69,7 +69,7 @@ def setup_logging(
     path_toconfig = value if value else default_path
 
     path_toconfig = path(path_toconfig)
-    
+
     if os.path.exists(path_toconfig):
         with open(path_toconfig, 'rt') as f:
             config = yaml.safe_load(f.read())

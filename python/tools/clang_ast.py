@@ -44,4 +44,4 @@ class ClangAST:
                 )
                 ############################################################
             except KeyError, e:
-                logging.error("KeyError - %s".format(str(e)))
+                logging.error("KeyError - %s" % str(e))
