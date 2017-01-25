@@ -142,6 +142,9 @@ def process(yaml_cfg):
     :type yaml_cfg: dict
     """
     ############################################################
+    # Récupérations des données de configurations (clang, locations, ...)
+    # à partir du fichier de configuration YAML
+    ############################################################
     cfg_clang = yaml_cfg['clang']
     cfg_clang_locations = cfg_clang['locations']
     # set the path to libclang library
@@ -161,23 +164,24 @@ def process(yaml_cfg):
     ####################################################################################################################
     filename = cfg_clang_locations['sources']['sbgEComBinaryLogs']
 
-    ############################################################
-    with open(filename, 'r') as fo:
-        sourcefile = fo.readlines()
-
-    # Récupération de la liste des headers
-    # regexp = r"#include \"sbgEComBinaryLog(.*).h\""
-    headers = extract_headers(sourcefile)
-    for header in headers:
-        print(header + ".h")
+    #
     translation_unit = index.parse(
         filename,
         list_options_for_clang
     )
     # translation_unit.save(filename+'.ast')
 
+    ############################################################
+    with open(filename, 'r') as fo:
+        sourcefile = fo.readlines()
+
+    # Récupération de la liste des noms de fichiers des headers
+    headers = extract_headers(sourcefile)
+    for header in headers:
+        print(header + ".h")
+
     bound_check_filename = partial(filter_source_filename, location_filename=filename)
-    bound_node_children = partial(node_children, filter=bound_check_filename)
+    # bound_node_children = partial(node_children, filter=bound_check_filename)
     # print(asciitree.draw_tree(translation_unit.cursor,
     #                           bound_node_children,
     #                           node_to_string))
@@ -222,9 +226,9 @@ def process(yaml_cfg):
     #                           bound_node_children,
     #                           print_node))
     ##########################################################################
-    # filtre les enums avec des '#' car pas encore traité ce cas
+    # filtre les comments/enums avec des '#' (SBG_ECOM_LOG_*#)
+    # on traite ces cas 'génériques' plus tard ...
     sbglogs_filtered = filter(lambda sbglob: all('#' not in enum for enum in sbglob.enum), sbglogs)
-
     print("\n".join(str(sbglog) for sbglog in sbglogs_filtered))
 
     # Generate .h .cpp sources files from sbglogs analysis.
