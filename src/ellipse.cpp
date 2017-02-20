@@ -69,7 +69,8 @@ int main(int argc, char **argv) {
 
     std::string uart_port;
     int uart_baud_rate;
-    private_nh.param<std::string>("uart_port", uart_port, "/dev/ttyUSB0");
+    //private_nh.param<std::string>("uart_port", uart_port, "/dev/ttyUSB0");
+    private_nh.param<std::string>("uart_port", uart_port, "/dev/ttyUSB1");
     private_nh.param<int>("uart_baud_rate", uart_baud_rate, 115200);
     //
     ROS_INFO_STREAM("uart_port: " << uart_port);
@@ -93,7 +94,7 @@ int main(int argc, char **argv) {
     // ****************************** SBG Config ******************************
     // Ne semble pas avoir d'influence sur les messages emis par la centrale ...
     try {
-        sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_nav());
+            sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_nav());
         sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_efk_quat());
         sbgwrapper.set_configuration(SBGConfiguration::build_configuration_for_log_ship_motion());
     } catch (const sbgExceptions &e) {

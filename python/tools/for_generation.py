@@ -172,6 +172,7 @@ def process(yaml_cfg):
     # translation_unit.save(filename+'.ast')
 
     ############################################################
+    # Lecture du fichier source: 'sbgEComBinaroLogs'
     with open(filename, 'r') as fo:
         sourcefile = fo.readlines()
 
