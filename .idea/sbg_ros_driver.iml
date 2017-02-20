@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/installspace/_setup_util.py">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/installspace/_setup_util.py" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/installspace/_setup_util.py">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/installspace/_setup_util.py" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/installspace/_setup_util.py">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/installspace/_setup_util.py" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/installspace/_setup_util.py">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/installspace/_setup_util.py" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/sbg_driver-msg-extras.cmake.develspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in">
+      <sourceFolder url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/catkin_generated/sbg_driver-msg-extras.cmake.installspace.in" isTestSource="false" />
+    </content>
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbgexceptions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher.inl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher_Visitor.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbglogparser/boost/sbglogparser.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbglogparser/simple/sbglogparser.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/sbgwrapper/sbgwrapper.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/package.xml" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/crc/sbgCrc.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/crc/sbgCrc.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterface.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterface.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceFile.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceFile.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceSerialUnix.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceUdp.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceUdp.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/network/sbgNetwork.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/network/sbgNetwork.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/platform/sbgPlatform.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/platform/sbgPlatform.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/splitBuffer/sbgSplitBuffer.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/splitBuffer/sbgSplitBuffer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/streamBuffer/sbgStreamBuffer.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/streamBuffer/sbgStreamBuffer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/swap/sbgSwap.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/swap/sbgSwap.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/version/sbgVersion.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/common/version/sbgVersion.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDebug.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDebug.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDvl.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDvl.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEvent.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEvent.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogImu.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogImu.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogMag.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogMag.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogOdometer.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogOdometer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogPressure.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogPressure.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogShipMotion.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogShipMotion.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogStatus.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogStatus.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUsbl.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUsbl.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUtc.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUtc.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogs.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogs.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmd.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmd.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdAdvanced.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdAdvanced.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdCommon.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdCommon.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdEvent.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdEvent.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdFeatures.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdFeatures.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdGnss.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdGnss.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInfo.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInfo.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInterface.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInterface.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdLicense.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdLicense.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdMag.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdMag.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOdo.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOdo.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOutput.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOutput.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSensor.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSensor.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSettings.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSettings.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/transfer/sbgEComTransfer.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/commands/transfer/sbgEComTransfer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/protocol/sbgEComProtocol.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/protocol/sbgEComProtocol.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/sbgECom.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/sbgECom/src/sbgECom.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/ellipse.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/.null.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/boost/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/boost/src/SBGLogtoROSPublisher.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/boost/src/SBGLogtoROSPublisher_Visitor.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/boost/src/sbglogparser.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/simple/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/simple/src/sbglogparser.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/std/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbglogparser/std/src/sbglogparser.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbgwrapper/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/sbgwrapper/src/sbgwrapper.cpp" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/em/pkg.pc.em">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/em/pkg.pc.em" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/interrogate_setup_dot_py.py">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/interrogate_setup_dot_py.py" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/_setup_util.py.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/_setup_util.py.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/env.sh.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/env.sh.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/generate_cached_setup.py.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/generate_cached_setup.py.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkg.context.pc.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkg.context.pc.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkgConfig-version.cmake.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkgConfig-version.cmake.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkgConfig.cmake.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/pkgConfig.cmake.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/rosinstall.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/rosinstall.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.bash.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.bash.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.sh.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.sh.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.zsh.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/cmake/templates/setup.zsh.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/catkin/package.xml">
+      <sourceFolder url="file:///opt/ros/indigo/share/catkin/package.xml" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/dynamic_reconfigure/cmake/setup_custom_pythonpath.sh.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/dynamic_reconfigure/cmake/setup_custom_pythonpath.sh.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-genmsg.cmake.em">
+      <sourceFolder url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-genmsg.cmake.em" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-genmsg.context.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-genmsg.context.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-extras.cmake.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-extras.cmake.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-paths.cmake.develspace.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-paths.cmake.develspace.in" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-paths.cmake.installspace.in">
+      <sourceFolder url="file:///opt/ros/indigo/share/genmsg/cmake/pkg-msg-paths.cmake.installspace.in" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/devel/include" />
+          <root url="file://$MODULE_DIR$/../../../catkin_ws/install/include" />
+          <root url="file://$MODULE_DIR$/include" />
+          <root url="file://$MODULE_DIR$/sbgECom/common" />
+          <root url="file://$MODULE_DIR$/sbgECom/src" />
+          <root url="file:///opt/ros/indigo/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include/cilk" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include/sanitizer" />
+          <root url="file:///usr/local/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Debug/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/MinSizeRel/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/RelWithDebInfo/devel/include" />
+          <root url="file://$USER_HOME$/.clion11/system/cmake/generated/965015c7/965015c7/Release/devel/include" />
+          <root url="file://$MODULE_DIR$/../../../catkin_ws/install/include" />
+          <root url="file://$MODULE_DIR$/include" />
+          <root url="file://$MODULE_DIR$/sbgECom/common" />
+          <root url="file://$MODULE_DIR$/sbgECom/src" />
+          <root url="file:///opt/ros/indigo/include" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include/cilk" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.9/include/sanitizer" />
+          <root url="file:///usr/local/include" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/include/sbglogparser/simple/sbglogparser.h" />
+          <root url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher.h" />
+          <root url="file://$MODULE_DIR$/include/sbglogparser/boost/sbglogparser.h" />
+          <root url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher_Visitor.h" />
+          <root url="file://$MODULE_DIR$/include/sbglogparser/boost/SBGLogtoROSPublisher.inl" />
+          <root url="file://$MODULE_DIR$/include/sbgwrapper/sbgwrapper.h" />
+          <root url="file://$MODULE_DIR$/include/sbgexceptions.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/streamBuffer/sbgStreamBuffer.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/streamBuffer/sbgStreamBuffer.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/splitBuffer/sbgSplitBuffer.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/splitBuffer/sbgSplitBuffer.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceSerialUnix.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterface.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceUdp.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterface.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceUdp.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceFile.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/interfaces/sbgInterfaceFile.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/platform/sbgPlatform.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/platform/sbgPlatform.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/version/sbgVersion.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/version/sbgVersion.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/network/sbgNetwork.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/network/sbgNetwork.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/swap/sbgSwap.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/swap/sbgSwap.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/crc/sbgCrc.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/common/crc/sbgCrc.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogMag.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogMag.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogPressure.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogShipMotion.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDebug.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDvl.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUsbl.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUtc.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogImu.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUtc.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogGps.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogImu.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogOdometer.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogs.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEkf.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogUsbl.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogOdometer.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogs.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/protocol/sbgEComProtocol.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/protocol/sbgEComProtocol.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/transfer/sbgEComTransfer.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/transfer/sbgEComTransfer.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdLicense.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdFeatures.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOutput.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdFeatures.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdLicense.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdAdvanced.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInterface.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInterface.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInfo.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdMag.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdEvent.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdMag.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdEvent.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdInfo.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSensor.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSensor.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmd.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdGnss.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOdo.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOdo.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSettings.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdGnss.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdCommon.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdSettings.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmd.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdCommon.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdAdvanced.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/commands/sbgEComCmdOutput.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/sbgECom.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/sbgECom.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogStatus.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogStatus.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogShipMotion.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEvent.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogEvent.h" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDebug.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogDvl.c" />
+          <root url="file://$MODULE_DIR$/sbgECom/src/binaryLogs/sbgEComBinaryLogPressure.h" />
+        </excluded>
+      </library>
+    </orderEntry>
+  </component>
+</module>
