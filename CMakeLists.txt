@@ -206,16 +206,21 @@ add_executable(
 
 #target_compile_options(ellipse PRIVATE -fpermissive)
 
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(sbg_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# add_dependencies(ellipse sbgECom)
-
 include(src/sbglogparser/CMakeLists.txt)
 include(src/sbgwrapper/CMakeLists.txt)
 
 ## Specify libraries to link a library or executable target against
 add_subdirectory(sbgECom)
+
+## Add cmake target dependencies of the executable
+## same as for the library above
+# add_dependencies(sbg_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(ellipse sbgECom)
+add_dependencies(
+    ellipse 
+    ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+    ${catkin_EXPORTED_TARGETS}
+)
 
 target_link_libraries(ellipse
         ${catkin_LIBRARIES}
@@ -287,6 +292,4 @@ install(FILES
 #    ${catkin_LIBRARIES}
 #    sbgECom
 #)
-
-add_dependencies(ellipse ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
