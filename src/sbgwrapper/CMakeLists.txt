@@ -32,3 +32,10 @@ add_library(
         ${PROJECT_SOURCE_DIR}/include/sbgwrapper/sbgwrapper.h
         ${PROJECT_SOURCE_DIR}/include/sbgexceptions.h
 )
+
+#MESSAGE("TEST -> catkin_EXPORTED_TARGETS: ${catkin_EXPORTED_TARGETS}")
+add_dependencies(
+    sbg_wrapper
+    ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+    ${catkin_EXPORTED_TARGETS}
+)

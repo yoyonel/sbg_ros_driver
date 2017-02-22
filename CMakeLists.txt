@@ -74,31 +74,31 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 # Generate messages in the 'msg' folder
 add_message_files(
-        DIRECTORY msg
-        FILES
+    DIRECTORY msg
+    FILES
 #
-        SbgLogAbstract.msg
+    SbgLogAbstract.msg
 #
-        SbgLogStatusData.msg
-        SbgLogImuData.msg
-        SbgLogEkfEulerData.msg
-        SbgLogEkfQuatData.msg
-        SbgLogEkfNavData.msg
-        SbgLogShipMotionData.msg
-        SbgLogOdometerData.msg
-        SbgLogUtcData.msg
-        SbgLogGpsPos.msg
-        SbgLogGpsVel.msg
-        SbgLogGpsHdt.msg
-        SbgLogGpsRaw.msg
-        SbgLogMag.msg
-        SbgLogMagCalib.msg
-        SbgLogDvlData.msg
-        SbgLogPressureData.msg
-        SbgLogUsblData.msg
-        SbgLogEvent.msg
-        SbgLogDebug0Data.msg
-        SbgLogFastImuData.msg
+    SbgLogStatusData.msg
+    SbgLogImuData.msg
+    SbgLogEkfEulerData.msg
+    SbgLogEkfQuatData.msg
+    SbgLogEkfNavData.msg
+    SbgLogShipMotionData.msg
+    SbgLogOdometerData.msg
+    SbgLogUtcData.msg
+    SbgLogGpsPos.msg
+    SbgLogGpsVel.msg
+    SbgLogGpsHdt.msg
+    SbgLogGpsRaw.msg
+    SbgLogMag.msg
+    SbgLogMagCalib.msg
+    SbgLogDvlData.msg
+    SbgLogPressureData.msg
+    SbgLogUsblData.msg
+    SbgLogEvent.msg
+    SbgLogDebug0Data.msg
+    SbgLogFastImuData.msg
 )
 
 
@@ -195,19 +195,33 @@ MESSAGE(STATUS "Catkin directories: ${catkin_INCLUDE_DIRS}")
 #add_dependencies(ellipse ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_std_cxx11_flag("src/ellipse.cpp")
+SET(SRC
+    src/ellipse.cpp
+    #
+    src/sbgwrapper/src/sbgwrapper.cpp
+    #
+    ##
+    src/sbglogparser/boost/src/SBGLogtoROSPublisher.cpp
+    src/sbglogparser/boost/src/SBGLogtoROSPublisher_Visitor.cpp
+    src/sbglogparser/boost/src/sbglogparser.cpp
+    ##
+    src/sbglogparser/std/src/sbglogparser.cpp
+    ##
+    src/sbglogparser/simple/src/sbglogparser.cpp
+)
+
+add_std_cxx11_flag("${SRC}")
 
 add_executable(
         ellipse
-        src/ellipse.cpp
         ${SRC}
         ${COMMON_SRC}
 )
 
 #target_compile_options(ellipse PRIVATE -fpermissive)
 
-include(src/sbglogparser/CMakeLists.txt)
-include(src/sbgwrapper/CMakeLists.txt)
+# include(src/sbglogparser/CMakeLists.txt)
+# include(src/sbgwrapper/CMakeLists.txt)
 
 ## Specify libraries to link a library or executable target against
 add_subdirectory(sbgECom)
@@ -225,25 +239,18 @@ add_subdirectory(sbgECom)
 #     ${${PROJECT_NAME}_EXPORTED_TARGETS} 
 #     ${catkin_EXPORTED_TARGETS}
 # )
-add_dependencies(
-    sbglog_parsers
-    ${${PROJECT_NAME}_EXPORTED_TARGETS} 
-    ${catkin_EXPORTED_TARGETS}
+
+#MESSAGE("TEST -> catkin_EXPORTED_TARGETS: ${catkin_EXPORTED_TARGETS}")
+
+target_link_libraries(
+    ellipse
+    ${catkin_LIBRARIES}
+    # sbglog_parsers
+    # sbg_wrapper
+    sbgECom
 )
 
-add_dependencies(
-    sbg_wrapper
-    ${${PROJECT_NAME}_EXPORTED_TARGETS} 
-    ${catkin_EXPORTED_TARGETS}
-)
-
-
-target_link_libraries(ellipse
-        ${catkin_LIBRARIES}
-        sbglog_parsers
-        sbg_wrapper
-        sbgECom
-)
+add_dependencies(ellipse ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 #############
 ## Install ##
@@ -261,7 +268,8 @@ target_link_libraries(ellipse
 
 # url: http://docs.ros.org/jade/api/catkin/html/howto/format2/building_libraries.html
 ## Mark executables and/or libraries for installation
-install(TARGETS ellipse sbglog_parsers sbg_wrapper
+# install(TARGETS ellipse sbglog_parsers sbg_wrapper
+install(TARGETS ellipse
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

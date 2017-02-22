@@ -22,3 +22,10 @@ add_library(
 
 # essentiel pour compiler avec boost::variant ... a voir pourquoi !
 target_compile_options(sbglog_parsers_boost PRIVATE -fpermissive)
+
+#MESSAGE("[Boost] TEST -> catkin_EXPORTED_TARGETS: ${catkin_EXPORTED_TARGETS}")
+# add_dependencies(
+#     sbglog_parsers_boost
+#     ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+#     ${catkin_EXPORTED_TARGETS}
+# )
