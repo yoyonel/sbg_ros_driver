@@ -192,7 +192,7 @@ MESSAGE(STATUS "Catkin directories: ${catkin_INCLUDE_DIRS}")
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(sbg ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_dependencies(ellipse ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
 add_std_cxx11_flag("src/ellipse.cpp")
@@ -287,3 +287,6 @@ install(FILES
 #    ${catkin_LIBRARIES}
 #    sbgECom
 #)
+
+add_dependencies(ellipse ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
