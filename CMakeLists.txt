@@ -99,6 +99,8 @@ add_message_files(
     SbgLogEvent.msg
     SbgLogDebug0Data.msg
     SbgLogFastImuData.msg
+    #
+    SbgEComDeviceInfo.msg
 )
 
 
