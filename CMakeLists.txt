@@ -101,6 +101,8 @@ add_message_files(
     SbgLogFastImuData.msg
     #
     SbgEComDeviceInfo.msg
+    #
+    gps.msg
 )
 
 
